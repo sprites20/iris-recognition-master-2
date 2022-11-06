@@ -37,7 +37,6 @@ eye_arr = []
 
 from numba import jit, cuda
 
-
 def save_data():
     names_file = open('data/names.dat', 'wb')
     global folder_pair
@@ -403,7 +402,7 @@ class Ui_MainWindow(object):
                         best_match_value = curr_match_value
                         best_match_path = "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin'
                         best_match_string = "./enrolledimages/" + i + '/' + sidetext + '/' + j
-            key, matches = compare_binfiles('./tempeye/bin.bin', best_match_path)
+            key, matches = compare_binfiles('./tempeye/bin.bin', best_match_path, rois1cache, keycache1cache)
             self.load_matches()
             
             print(best_match_string)

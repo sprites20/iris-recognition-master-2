@@ -34,11 +34,13 @@ def compare_images(filepath1, filepath2):
 @jit(target_backend='cuda')
 def compare_binfiles(bin_path1, bin_path2, rois1, keycache1):
     
+    
     #Cache bin_path1
     if rois1 == None:
         print( "Analysing " + bin_path1)
         rois_1, key1 = load_rois_from_bin(bin_path1)
-    
+    else:
+        rois_1, key1 = rois1, keycache1
     print( "Analysing " + bin_path2)
     rois_2, key2 = load_rois_from_bin(bin_path2)
     
