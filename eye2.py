@@ -22,6 +22,8 @@ from PyQt5.QtGui import QPixmap
 from pathlib import Path    
 import json
 
+
+
 curr_image = ""
 eyechanged = False
 
@@ -32,6 +34,9 @@ folder_pair = {}
 eye_arr = []
 
 #compare_binfiles("C:/Users/NakaMura/Downloads/iris-recognition-master (1)/iris-recognition-master/enrolledimages/1/left/1/bin.bin", "C:/Users/NakaMura/Downloads/iris-recognition-master (1)/iris-recognition-master/enrolledimages/1/left/1/bin.bin")
+
+from numba import jit, cuda
+
 
 def save_data():
     names_file = open('data/names.dat', 'wb')
@@ -335,7 +340,7 @@ class Ui_MainWindow(object):
                     None
         return folder_nums
         #print(folder_nums)
-
+    #@jit(target_backend='cuda')
     def thisenroll(self):
         global eyechanged
         side = 0 if self.radioButton.isChecked() else 1 if self.radioButton_2.isChecked() else 0
@@ -356,11 +361,11 @@ class Ui_MainWindow(object):
             #Get list of eyes in same side
             folder_nums = self.get_folders("./enrolledimages")
             folder_num2 = {}
-            print(folder_nums)
+            #print(folder_nums)
             sidetext = "left" if self.radioButton.isChecked() else "right" if self.radioButton_2.isChecked() else "left"
             for i in folder_nums:
                 folder_num2[i] = self.get_folders("./enrolledimages/" + i + '/' + sidetext)
-                print(folder_num2[i])
+                #print(folder_num2[i])
             try:
                 shutil.rmtree('./tempeye/')
                 os.mkdir('./tempeye')
@@ -377,12 +382,21 @@ class Ui_MainWindow(object):
             best_match_value = 0
             best_match_path = ""
             best_match_string = ""
+            first_match = True
+            rois1cache = None
+            keycache1cache = None
             for i in folder_nums:
                 for j in folder_num2[i]:
                     curr_match_value = 0
-                    key, matches = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin')
-                    print(key)
-                    print(matches)
+                    if first_match:
+                        key, matches, rois1, keycache1 = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', None, None)
+                        rois1cache = rois1
+                        keycache1cache = keycache1
+                        first_match = False
+                    else:
+                        key, matches = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', rois1cache, keycache1cache)
+                    #print(key)
+                    #print(matches)
                     for pos in ['right-side','left-side','bottom','complete']:
                         curr_match_value += matches[pos]/main_keypoints[pos]/4
                     if curr_match_value >= best_match_value:
