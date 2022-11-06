@@ -39,9 +39,9 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>140</x>
       <y>400</y>
-      <width>151</width>
+      <width>121</width>
       <height>41</height>
      </rect>
     </property>
@@ -497,6 +497,19 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>Settings</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>400</y>
+      <width>121</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Mass Process</string>
     </property>
    </widget>
   </widget>

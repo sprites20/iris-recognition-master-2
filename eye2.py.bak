@@ -12,6 +12,7 @@ import os
 import pickle
 import time
 import shutil
+import glob
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -174,7 +175,7 @@ class ImageDropBox(QtWidgets.QLabel):
 class Ui_MainWindow(object):
     def ButtonConnections(self):
         self.pushButton.clicked.connect(self.thisenroll)
-        
+        self.pushButton_2.clicked.connect(self.masstest)
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1154, 720)
@@ -183,8 +184,11 @@ class Ui_MainWindow(object):
         self.label = ImageDropBox(self.centralwidget)
         
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(60, 400, 151, 41))
+        self.pushButton.setGeometry(QtCore.QRect(140, 400, 121, 41))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(10, 400, 121, 41))
+        self.pushButton_2.setObjectName("pushButton_2")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setGeometry(QtCore.QRect(80, 320, 181, 31))
         self.groupBox.setTitle("")
@@ -422,6 +426,7 @@ class Ui_MainWindow(object):
                 "eyebeingrecognized" : Path(curr_image).name,
                 "groundtruth" : matchjsontable["groundtruth"],     
                 "groundtruth_eyename" : matchjsontable["eyename"],
+                "side" : matchjsontable["side"],
                 "best_match_string" : best_match_string,
                 "main_keypoints" : main_keypoints,
                 "matches" : matches,
@@ -436,6 +441,18 @@ class Ui_MainWindow(object):
             #info += str(positivity) + "\n"
             self.textEdit_4.setText(info)
             self.label_40.setPixmap(QtGui.QPixmap("./enrolledimages/" + i + '/' + sidetext + '/' + j + '/equalized histogram iris region.jpg'))
+    def masstest(self):
+        if self.radioButton_7.isChecked():
+            #Mass Enroll
+            path = "./CASIA1/**"
+            globity = glob.glob(path, recursive=True)
+            for path in globity:
+                if path.endswith('jpg'):
+                    print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2])
+                    if path.split('\\')[-1].split('_')[-2] == '2':
+                        enrolleye(path, '1eye_' + path.split('\\')[-1].split('_')[-3], 0 if path.split('\\')[-1].split('_')[-2] == '1' else 1 if path.split('\\')[-1].split('_')[-2] == '2' else 0)
+        if self.radioButton_8.isChecked():
+            pass
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -472,6 +489,7 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.label_17.setText(_translate("MainWindow", "Eye Info"))
         self.label_18.setText(_translate("MainWindow", "Settings"))
+        self.pushButton_2.setText(_translate("MainWindow", "Mass Process"))
 
 
 if __name__ == "__main__":
