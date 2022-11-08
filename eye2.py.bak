@@ -13,6 +13,7 @@ import pickle
 import time
 import shutil
 import glob
+import pathlib
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -340,53 +341,46 @@ class Ui_MainWindow(object):
         return folder_nums
         #print(folder_nums)
     #@jit(target_backend='cuda')
-    def thisenroll(self):
-        global eyechanged
-        side = 0 if self.radioButton.isChecked() else 1 if self.radioButton_2.isChecked() else 0
-        if self.radioButton_7.isChecked():
-            print("Enrolling")
-            eyename = self.textEdit.toPlainText() if not self.textEdit.toPlainText() == None else "Anonymous"
-            if curr_image != "" and eyechanged:
-                enrolleye(curr_image, eyename, side)
-                path = ""
-                with open('path.txt') as f:
-                    path = f.readlines()
-                self.label_39.setPixmap(QtGui.QPixmap(str(path[0]) + "/complete.jpg"))
-                
-                eyechanged = False
-            else:
-                print("Invalid Image or Eye Already Enrolled")
-        elif self.radioButton_8.isChecked():
-            #Get list of eyes in same side
-            folder_nums = self.get_folders("./enrolledimages")
-            folder_num2 = {}
-            #print(folder_nums)
-            sidetext = "left" if self.radioButton.isChecked() else "right" if self.radioButton_2.isChecked() else "left"
-            for i in folder_nums:
-                folder_num2[i] = self.get_folders("./enrolledimages/" + i + '/' + sidetext)
-                #print(folder_num2[i])
+    def recognize(self, image_curr, side):
+        print(image_curr)
+        #Get list of eyes in same side
+        folder_nums = self.get_folders("./enrolledimages")
+        folder_num2 = {}
+        #print(folder_nums)
+        sidetext = "left" if side==0 else "right" if side==1 else "left"
+        for i in folder_nums:
+            folder_num2[i] = self.get_folders("./enrolledimages/" + i + '/' + sidetext)
+            #print(folder_num2[i])
+        try:
+            shutil.rmtree('./tempeye/')
+            os.mkdir('./tempeye')
+        except:
             try:
-                shutil.rmtree('./tempeye/')
                 os.mkdir('./tempeye')
             except:
-                try:
-                    os.mkdir('./tempeye')
-                except:
-                    None
-            rois, main_keypoints = load_rois_from_image(curr_image, './tempeye')
-            #rois = load_rois_from_image(curr_image, './tempeye')
-            self.label_39.setPixmap(QtGui.QPixmap("./tempeye/equalized histogram iris region.jpg"))
-            
-            best_match_array = {}
-            best_match_value = 0
-            best_match_path = ""
-            best_match_string = ""
-            first_match = True
-            rois1cache = None
-            keycache1cache = None
-            for i in folder_nums:
-                for j in folder_num2[i]:
-                    curr_match_value = 0
+                None
+        rois, main_keypoints = load_rois_from_image(image_curr, './tempeye')
+        #rois = load_rois_from_image(curr_image, './tempeye')
+        self.label_39.setPixmap(QtGui.QPixmap("./tempeye/equalized histogram iris region.jpg"))
+        
+        best_match_array = {}
+        best_match_value = 0
+        best_match_path = ""
+        best_match_string = ""
+        first_match = True
+        rois1cache = None
+        keycache1cache = None
+        key, matches, rois1, keycache1 = None, None, None, None
+        for i in folder_nums:
+            for j in folder_num2[i]:
+                curr_match_value = 0
+                data = json.load(open("./enrolledimages/" + i + '/' + sidetext + '/' + j + "/info.json"))
+                ground = data["groundtruth"].split('_')
+                currmg = image_curr.split('/')[-1].split('_')
+                #print(currmg)
+                #print(ground)
+                if ground[-2] == currmg[-2] and ground[-3] == currmg[-3]:
+                    print(data["groundtruth"])
                     if first_match:
                         key, matches, rois1, keycache1 = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', None, None)
                         rois1cache = rois1
@@ -402,58 +396,76 @@ class Ui_MainWindow(object):
                         best_match_value = curr_match_value
                         best_match_path = "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin'
                         best_match_string = "./enrolledimages/" + i + '/' + sidetext + '/' + j
-            key, matches = compare_binfiles('./tempeye/bin.bin', best_match_path, None, None)
-            self.load_matches()
+        key, matches = compare_binfiles('./tempeye/bin.bin', best_match_path, rois1cache, keycache1cache)
+        self.load_matches()
+        
+        print(best_match_string)
+        print(main_keypoints)
+        print(matches)
+        print(str(best_match_value * 100) + "% match")
+        
+        matchjsontable = {}
+        with open(best_match_string + '/info.json', 'r') as openfile:
+            # Reading from json file
+            matchjsontable = json.load(openfile)
+            print(matchjsontable)
+        
+        
+        positivity = ""
+        if(matchjsontable["groundtruth"] == Path(image_curr).name):
+            print("Positive")
+            positivity = "Positive"
+        else:
+            print("Negative")
+            positivity = "Negative"
             
-            print(best_match_string)
-            print(main_keypoints)
-            print(matches)
-            print(str(best_match_value * 100) + "% match")
+        info = ""
+        info += str(best_match_path) + "\n"
+        info += str(matches) + "\n"
+        info += str(str(best_match_value * 100) + "% match") + "\n"
+        
+        #Cache JSON for Recognition
+        if not os.path.isdir("./recognition_cache"):
+            os.mkdir("./recognition_cache")
+        
+        #Takes from info.json of best match
+        recognition_cache = {
+            "eyebeingrecognized" : Path(image_curr).name,
+            "groundtruth" : matchjsontable["groundtruth"],     
+            "groundtruth_eyename" : matchjsontable["eyename"],
+            "side" : matchjsontable["side"],
+            "best_match_string" : best_match_string,
+            "main_keypoints" : main_keypoints,
+            "matches" : matches,
+            "best_match_value" : best_match_value
+        }
+        
+        with open("./recognition_cache/" + Path(image_curr).name + '.json', 'w') as openfile:
+            # Reading from json file
+            y = json.dumps(recognition_cache, indent=4)
+            openfile.write(y)
             
-            matchjsontable = {}
-            with open(best_match_string + '/info.json', 'r') as openfile:
-                # Reading from json file
-                matchjsontable = json.load(openfile)
-                print(matchjsontable)
-            
-            
-            positivity = ""
-            if(matchjsontable["groundtruth"] == Path(curr_image).name):
-                print("Positive")
-                positivity = "Positive"
+        #info += str(positivity) + "\n"
+        self.textEdit_4.setText(info)
+        self.label_40.setPixmap(QtGui.QPixmap("./enrolledimages/" + i + '/' + sidetext + '/' + j + '/equalized histogram iris region.jpg'))
+    def thisenroll(self):
+        global eyechanged
+        side = 0 if self.radioButton.isChecked() else 1 if self.radioButton_2.isChecked() else 0
+        if self.radioButton_7.isChecked():
+            print("Enrolling")
+            eyename = self.textEdit.toPlainText() if not self.textEdit.toPlainText() == None else "Anonymous"
+            if curr_image != "" and eyechanged:
+                enrolleye(curr_image, eyename, side)
+                path = ""
+                with open('path.txt') as f:
+                    path = f.readlines()
+                self.label_39.setPixmap(QtGui.QPixmap(str(path[0]) + "/complete.jpg"))
+                eyechanged = False
             else:
-                print("Negative")
-                positivity = "Negative"
-                
-            info = ""
-            info += str(best_match_path) + "\n"
-            info += str(matches) + "\n"
-            info += str(str(best_match_value * 100) + "% match") + "\n"
-            
-            #Cache JSON for Recognition
-            if not os.path.isdir("./recognition_cache"):
-                os.mkdir("./recognition_cache")
-            
-            #Takes from info.json of best match
-            recognition_cache = {
-                "eyebeingrecognized" : Path(curr_image).name,
-                "groundtruth" : matchjsontable["groundtruth"],     
-                "groundtruth_eyename" : matchjsontable["eyename"],
-                "side" : matchjsontable["side"],
-                "best_match_string" : best_match_string,
-                "main_keypoints" : main_keypoints,
-                "matches" : matches,
-                "best_match_value" : best_match_value
-            }
-            
-            with open("./recognition_cache/" + Path(curr_image).name + '.json', 'w') as openfile:
-                # Reading from json file
-                y = json.dumps(recognition_cache, indent=4)
-                openfile.write(y)
-                
-            #info += str(positivity) + "\n"
-            self.textEdit_4.setText(info)
-            self.label_40.setPixmap(QtGui.QPixmap("./enrolledimages/" + i + '/' + sidetext + '/' + j + '/equalized histogram iris region.jpg'))
+                print("Invalid Image or Eye Already Enrolled")
+        elif self.radioButton_8.isChecked():
+            print(curr_image)
+            self.recognize(str(curr_image), side)
     def masstest(self):
         if self.radioButton_7.isChecked():
             #Mass Enroll
@@ -464,8 +476,31 @@ class Ui_MainWindow(object):
                     print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2])
                     if path.split('\\')[-1].split('_')[-2] == '1' or path.split('\\')[-1].split('_')[-2] == '2':
                         enrolleye(path, '1eye_' + path.split('\\')[-1].split('_')[-3], 0 if path.split('\\')[-1].split('_')[-2] == '1' else 1 if path.split('\\')[-1].split('_')[-2] == '2' else 0)
-        if self.radioButton_8.isChecked():
-            pass
+        elif self.radioButton_8.isChecked():
+            path = "./CASIA1/**"
+            globity = glob.glob(path, recursive=True)
+            
+            for path in globity:
+                if path.endswith('jpg'):
+                    #print(path)
+                    path = path.split('/')[-1].split('\\')
+                    side = int(path[-1].split('_')[-2])
+                    print(path)
+                    print(side)
+                    pathsub = ""
+                    for i in path:
+                        pathsub += '/' + i 
+                    #print(path)
+                    mainpath = pathlib.Path(__file__).parent.resolve()
+                    #print(mainpath)
+                    global curr_image
+                    curr_image = str(mainpath) + str(pathsub)
+                    print(curr_image)
+                    global eyechanged
+                    eyechanged = True
+                    if curr_image != "":
+                        self.recognize(str(curr_image), side)
+                    
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
