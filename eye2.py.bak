@@ -452,55 +452,63 @@ class Ui_MainWindow(object):
         global eyechanged
         side = 0 if self.radioButton.isChecked() else 1 if self.radioButton_2.isChecked() else 0
         if self.radioButton_7.isChecked():
-            print("Enrolling")
-            eyename = self.textEdit.toPlainText() if not self.textEdit.toPlainText() == None else "Anonymous"
-            if curr_image != "" and eyechanged:
-                enrolleye(curr_image, eyename, side)
-                path = ""
-                with open('path.txt') as f:
-                    path = f.readlines()
-                self.label_39.setPixmap(QtGui.QPixmap(str(path[0]) + "/complete.jpg"))
-                eyechanged = False
-            else:
-                print("Invalid Image or Eye Already Enrolled")
+            try:
+                print("Enrolling")
+                eyename = self.textEdit.toPlainText() if not self.textEdit.toPlainText() == None else "Anonymous"
+                if curr_image != "" and eyechanged:
+                    enrolleye(curr_image, eyename, side)
+                    path = ""
+                    with open('path.txt') as f:
+                        path = f.readlines()
+                    self.label_39.setPixmap(QtGui.QPixmap(str(path[0]) + "/complete.jpg"))
+                    eyechanged = False
+                else:
+                    print("Invalid Image or Eye Already Enrolled")
+            except:
+                pass
         elif self.radioButton_8.isChecked():
             print(curr_image)
             self.recognize(str(curr_image), side)
     def masstest(self):
-        if self.radioButton_7.isChecked():
-            #Mass Enroll
-            path = "./CASIA1/**"
-            globity = glob.glob(path, recursive=True)
-            for path in globity:
-                if path.endswith('jpg'):
-                    print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2])
-                    if path.split('\\')[-1].split('_')[-2] == '1' or path.split('\\')[-1].split('_')[-2] == '2':
-                        enrolleye(path, '1eye_' + path.split('\\')[-1].split('_')[-3], 0 if path.split('\\')[-1].split('_')[-2] == '1' else 1 if path.split('\\')[-1].split('_')[-2] == '2' else 0)
+        try:
+            if self.radioButton_7.isChecked():
+                #Mass Enroll
+                path = "./CASIA1/**"
+                globity = glob.glob(path, recursive=True)
+                for path in globity:
+                    if path.endswith('jpg'):
+                        print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2])
+                        if path.split('\\')[-1].split('_')[-2] == '1' or path.split('\\')[-1].split('_')[-2] == '2':
+                            enrolleye(path, '1eye_' + path.split('\\')[-1].split('_')[-3], 0 if path.split('\\')[-1].split('_')[-2] == '1' else 1 if path.split('\\')[-1].split('_')[-2] == '2' else 0)
+            except:
+                pass
         elif self.radioButton_8.isChecked():
             path = "./CASIA1/**"
             globity = glob.glob(path, recursive=True)
             
             for path in globity:
-                if path.endswith('jpg'):
-                    #print(path)
-                    path = path.split('/')[-1].split('\\')
-                    side = int(path[-1].split('_')[-2])
-                    print(path)
-                    print(side)
-                    pathsub = ""
-                    for i in path:
-                        pathsub += '/' + i 
-                    #print(path)
-                    mainpath = pathlib.Path(__file__).parent.resolve()
-                    #print(mainpath)
-                    global curr_image
-                    curr_image = str(mainpath) + str(pathsub)
-                    print(curr_image)
-                    global eyechanged
-                    eyechanged = True
-                    if curr_image != "":
-                        self.recognize(str(curr_image), side)
-                    
+                try:
+                    if path.endswith('jpg'):
+                        #print(path)
+                        path = path.split('/')[-1].split('\\')
+                        side = int(path[-1].split('_')[-2]) - 1
+                        print(path)
+                        print(side)
+                        pathsub = ""
+                        for i in path:
+                            pathsub += '/' + i 
+                        #print(path)
+                        mainpath = pathlib.Path(__file__).parent.resolve()
+                        #print(mainpath)
+                        global curr_image
+                        curr_image = str(mainpath) + str(pathsub)
+                        print(curr_image)
+                        global eyechanged
+                        eyechanged = True
+                        if curr_image != "":
+                            self.recognize(str(curr_image), side)
+                except:
+                    pass
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
