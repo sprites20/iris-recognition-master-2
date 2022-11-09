@@ -1,0 +1,405 @@
+
+"""
+
+
+filename = 'myimage.png'
+imagea = (scipy.misc.imread(filename)).astype(float)
+
+poissonNoise = np.random.poisson(imagea).astype(float)
+
+noisyImage = imagea + poissonNoise
+
+#here care must be taken to re cast the result to uint8 if needed or scale to 0-1 etc...
+
+
+"""
+
+"""
+#Poisson noise
+import random
+import cv2
+ 
+def add_noise(img):
+ 
+    # Getting the dimensions of the image
+    row , col = img.shape
+     
+    # Randomly pick some pixels in the
+    # image for coloring them white
+    # Pick a random number between 300 and 10000
+    number_of_pixels = random.randint(300, 10000)
+    for i in range(number_of_pixels):
+       
+        # Pick a random y coordinate
+        y_coord=random.randint(0, row - 1)
+         
+        # Pick a random x coordinate
+        x_coord=random.randint(0, col - 1)
+         
+        # Color that pixel to white
+        img[y_coord][x_coord] = 255
+         
+    # Randomly pick some pixels in
+    # the image for coloring them black
+    # Pick a random number between 300 and 10000
+    number_of_pixels = random.randint(300 , 10000)
+    for i in range(number_of_pixels):
+       
+        # Pick a random y coordinate
+        y_coord=random.randint(0, row - 1)
+         
+        # Pick a random x coordinate
+        x_coord=random.randint(0, col - 1)
+         
+        # Color that pixel to black
+        img[y_coord][x_coord] = 0
+         
+    return img
+
+# salt-and-pepper noise can
+# be applied only to grayscale images
+# Reading the color image in grayscale image
+img = cv2.imread('lena.jpg',
+                 cv2.IMREAD_GRAYSCALE)
+ 
+#Storing the image
+cv2.imwrite('salt-and-pepper-lena.jpg',
+            add_noise(img))
+            
+            # importing libraries
+import cv2
+import numpy as np
+  
+image = cv2.imread('C://Geeksforgeeks//image_processing//fruits.jpg')
+  
+cv2.imshow('Original Image', image)
+cv2.waitKey(0)
+ """
+ 
+import skimage
+import matplotlib.pyplot as plt
+import scipy
+import numpy as np
+import random
+import cv2
+import os
+from os import listdir
+
+def gaussian(img, comb):
+    # Gaussian Blur
+    if not comb:
+        image = cv2.imread(img)
+        Gaussian = cv2.GaussianBlur(image, (7, 7), 0)
+        cv2.imwrite("GaussianBlur_" + img, Gaussian)
+    else:
+        Gaussian = cv2.GaussianBlur(img, (7, 7), 0)
+        return Gaussian
+
+def median(img, comb):
+    # Median Blur
+    if not comb:
+        image = cv2.imread(img)
+        median = cv2.medianBlur(image, 5)
+        cv2.imwrite("MedianBlur_" + img, median)
+    else:
+        median = cv2.medianBlur(img, 5)
+        return median
+
+  
+def bilateral(img, comb):
+    # Bilateral Blur
+
+    if not comb:
+        image = cv2.imread(img)
+        bilateral = cv2.bilateralFilter(image, 9, 75, 75)
+        cv2.imwrite("BilateralBlur_" + img, bilateral)
+    else:
+        bilateral = cv2.bilateralFilter(img, 9, 75, 75)
+        return bilateral
+def motion(img, comb):
+    size = 15
+
+    # generating the kernel
+    kernel_motion_blur = np.zeros((size, size))
+    kernel_motion_blur[int((size-1)/2), :] = np.ones(size)
+    kernel_motion_blur = kernel_motion_blur / size
+    if not comb:
+        image = cv2.imread(img)
+        #cv2.imshow('Original', image)
+
+        # applying the kernel to the input image
+        output = cv2.filter2D(image, -1, kernel_motion_blur)
+        img = img.split('\\')[-1]
+        cv2.imwrite("MotionBlur_" + img, output)
+    else:
+        output = cv2.filter2D(img, -1, kernel_motion_blur)
+        return output
+    #cv2.imshow('Motion Blur', output)
+    #cv2.waitKey(0)
+
+#Skimage Speckle and Gaussian
+
+
+def plotnoise(img, mode, r, c, i, comb):
+    #plt.subplot(r,c,i)
+    if not comb:
+        image = cv2.imread(img)
+        image = np.flip(image, axis=-1) 
+        if mode is not None:
+            gimg = skimage.util.random_noise(image, mode=mode)
+            return gimg
+            #plt.imsave(str(mode) + img, gimg)
+        #plt.title(mode)
+        #plt.axis("off")
+    else:
+        image = img
+        #image = np.flip(image, axis=-1) 
+        #cv2.imshow("", image)
+        #cv2.waitKey(0)
+        if mode is not None:
+            gimg = skimage.util.random_noise(image, mode=mode)
+            gimg = cv2.normalize(gimg, dst=None, alpha=0, beta=255,norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
+            #gimg = np.flip()
+            return gimg
+
+plt.figure(figsize=(18,24))
+r=4
+c=2
+
+def speckle(img, comb):
+    if not comb:
+        gimg = plotnoise(img, "speckle", r, c, 7, False)
+        img = img.split('\\')[-1]
+        plt.imsave("speckle_" + img, gimg)
+    else:
+        gimg = plotnoise(img, "speckle", r, c, 7, True)
+        return gimg
+    
+
+def saltandpepper(img, comb):
+    if not comb:
+        gimg = plotnoise(img, "s&p", r,c,6, False)
+        img = img.split('\\')[-1]
+        plt.imsave("s&p_" + img, gimg)
+    else:
+        gimg = plotnoise(img, "s&p", r, c, 7, True)
+        return gimg
+        
+def poisson(img, comb):
+    if not comb:
+        gimg = plotnoise(img, "poisson", r,c,6, False)
+        img = img.split('\\')[-1]
+        plt.imsave("poisson_" + img, gimg)
+    else:
+        gimg = plotnoise(img, "poisson", r, c, 7, True)
+        return gimg
+
+def addnoise(img, noise):
+    if noise == "gaussian":
+        image = gaussian(img, True)
+    elif noise == "median":
+        image = median(img, True)
+    elif noise == "bilateral":
+        image = bilateral(img, True)
+    elif noise == "motion":
+        image = motion(img, True)
+    elif noise == "speckle":
+        image = speckle(img, True)
+    elif noise == "saltandpepper":
+        image = saltandpepper(img, True)
+    elif noise == "poisson":
+        image = poisson(img, True)
+    try:
+        return image
+    except:
+        print("Image is None!")
+
+def combinenoise(img, noise1, noise2):
+    if noise2 == "all":
+        if noise1 == "gaussian":
+            #combinenoise(img, noise1, "gaussian")
+            combinenoise(img, noise1, "median")
+            combinenoise(img, noise1, "bilateral")
+            combinenoise(img, noise1, "motion")
+            combinenoise(img, noise1, "speckle")
+            combinenoise(img, noise1, "saltandpepper")
+            combinenoise(img, noise1, "poisson")
+        elif noise1 == "median":
+            combinenoise(img, noise1, "gaussian")
+            #combinenoise(img, noise1, "median")
+            combinenoise(img, noise1, "bilateral")
+            combinenoise(img, noise1, "motion")
+            combinenoise(img, noise1, "speckle")
+            combinenoise(img, noise1, "saltandpepper")
+            combinenoise(img, noise1, "poisson")
+        elif noise1 == "bilateral":
+            combinenoise(img, noise1, "gaussian")
+            combinenoise(img, noise1, "median")
+            #combinenoise(img, noise1, "bilateral")
+            combinenoise(img, noise1, "motion")
+            combinenoise(img, noise1, "speckle")
+            combinenoise(img, noise1, "saltandpepper")
+            combinenoise(img, noise1, "poisson")
+        elif noise1 == "motion":
+            combinenoise(img, noise1, "gaussian")
+            combinenoise(img, noise1, "median")
+            combinenoise(img, noise1, "bilateral")
+            #combinenoise(img, noise1, "motion")
+            combinenoise(img, noise1, "speckle")
+            combinenoise(img, noise1, "saltandpepper")
+            combinenoise(img, noise1, "poisson")
+        elif noise1 == "speckle":
+            combinenoise(img, noise1, "gaussian")
+            combinenoise(img, noise1, "median")
+            combinenoise(img, noise1, "bilateral")
+            combinenoise(img, noise1, "motion")
+            #combinenoise(img, noise1, "speckle")
+            combinenoise(img, noise1, "saltandpepper")
+            combinenoise(img, noise1, "poisson")
+        elif noise1 == "saltandpepper":
+            combinenoise(img, noise1, "gaussian")
+            combinenoise(img, noise1, "median")
+            combinenoise(img, noise1, "bilateral")
+            combinenoise(img, noise1, "motion")
+            combinenoise(img, noise1, "speckle")
+            #combinenoise(img, noise1, "saltandpepper")
+            combinenoise(img, noise1, "poisson")
+        elif noise1 == "poisson":
+            combinenoise(img, noise1, "gaussian")
+            combinenoise(img, noise1, "median")
+            combinenoise(img, noise1, "bilateral")
+            combinenoise(img, noise1, "motion")
+            combinenoise(img, noise1, "speckle")
+            combinenoise(img, noise1, "saltandpepper")
+            #combinenoise(img, noise1, "poisson")
+    else:
+        image = cv2.imread(img)
+        noised1 = addnoise(image, noise1)
+        noised2 = addnoise(noised1, noise2)
+        img = img.split('\\')[-1]
+        print(noise1 + "_" + noise2 + "_" + img)
+        cv2.imwrite(noise1 + "_" + noise2 + "_" + img, noised2)
+    #return noised2
+ 
+from pathlib import Path
+import glob
+
+# get the path or directory
+path = "./**"
+globity = glob.glob(path, recursive=True)
+for path in globity:
+    if path.endswith('jpg') or path.endswith('png') or path.endswith('jpeg'):
+        print(path)
+        #path = path.split('\\')[-1]
+        #motion(path, False)
+        #poisson(path, False)
+        combinenoise(path, "motion", "poisson")
+"""
+# get the path or directory
+folder_dir = ""
+for images in os.listdir("./"):
+    # check if the image ends with png or jpg or jpeg
+    if (images.endswith(".png") or images.endswith(".jpg")\
+        or images.endswith(".jpeg")):
+        # display
+        print(images)
+        img = folder_dir + images
+
+        gaussian(img, False)
+        median(img, False)
+        bilateral(img, False)
+        motion(img, False)
+        speckle(img, False)
+        saltandpepper(img, False)
+
+        combinenoise(img, "gaussian", "speckle")
+        combinenoise(img, "gaussian", "speckle")
+        combinenoise(img, "gaussian", "all")
+"""
+
+"""
+img = "IMG_20220802_111635_221.jpg"
+
+gaussian(img, False)
+median(img, False)
+bilateral(img, False)
+motion(img, False)
+speckle(img, False)
+saltandpepper(img, False)
+
+combinenoise(img, "gaussian", "speckle")
+combinenoise(img, "gaussian", "speckle")
+combinenoise(img, "gaussian", "all")
+"""
+
+"""
+img_path="https://i.guim.co.uk/img/media/4ddba561156645952502f7241bd1a64abd0e48a3/0_1251_3712_2225/master/3712.jpg?width=1920&quality=85&auto=format&fit=max&s=1280341b186f8352416517fc997cd7da"
+img = skimage.io.imread(img_path)/255.0
+plotnoise(img, "gaussian", r,c,1)
+plotnoise(img, "localvar", r,c,2)
+plotnoise(img, "poisson", r,c,3)
+plotnoise(img, "salt", r,c,4)
+plotnoise(img, "pepper", r,c,5)
+plotnoise(img, "s&p", r,c,6)
+plotnoise(img, "speckle", r,c,7)
+plotnoise(img, None, r,c,8)
+plt.show()
+"""
+
+
+"""
+#Wiener
+from scipy.misc import face
+from scipy.signal import wiener
+import matplotlib.pyplot as plt
+import numpy as np
+rng = np.random.default_rng()
+img = rng.random((40, 40))    #Create a random image
+filtered_img = wiener(img, (5, 5))  #Filter the image
+f, (plot1, plot2) = plt.subplots(1, 2)
+plot1.imshow(img)
+plot2.imshow(filtered_img)
+plt.show()
+
+
+# Lucy Richardson
+import numpy as np
+import matplotlib.pyplot as plt
+
+from scipy.signal import convolve2d as conv2
+
+from skimage import color, data, restoration
+
+rng = np.random.default_rng()
+
+astro = color.rgb2gray(data.astronaut())
+
+psf = np.ones((5, 5)) / 25
+astro = conv2(astro, psf, 'same')
+# Add Noise to Image
+astro_noisy = astro.copy()
+astro_noisy += (rng.poisson(lam=25, size=astro.shape) - 10) / 255.
+
+# Restore Image using Richardson-Lucy algorithm
+deconvolved_RL = restoration.richardson_lucy(astro_noisy, psf, num_iter=30)
+
+fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(8, 5))
+plt.gray()
+
+for a in (ax[0], ax[1], ax[2]):
+       a.axis('off')
+
+ax[0].imshow(astro)
+ax[0].set_title('Original Data')
+
+ax[1].imshow(astro_noisy)
+ax[1].set_title('Noisy data')
+
+ax[2].imshow(deconvolved_RL, vmin=astro_noisy.min(), vmax=astro_noisy.max())
+ax[2].set_title('Restoration using\nRichardson-Lucy')
+
+
+fig.subplots_adjust(wspace=0.02, hspace=0.2,
+                    top=0.9, bottom=0.05, left=0, right=1)
+plt.show()
+"""
