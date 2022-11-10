@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "poisson_051_1_1.jpg",
+    "groundtruth": "051_1_1.jpg",
+    "groundtruth_eyename": "1eye_051",
+    "side": "left",
+    "best_match_string": "./enrolledimages/56/left/1",
+    "main_keypoints": {
+        "right-side": 70,
+        "left-side": 67,
+        "bottom": 97,
+        "complete": 241
+    },
+    "matches": {
+        "right-side": 10,
+        "left-side": 12,
+        "bottom": 26,
+        "complete": 43
+    },
+    "best_match_value": 0.192106523524252
+}

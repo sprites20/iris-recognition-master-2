@@ -470,20 +470,20 @@ class Ui_MainWindow(object):
             print(curr_image)
             self.recognize(str(curr_image), side)
     def masstest(self):
-        try:
-            if self.radioButton_7.isChecked():
-                #Mass Enroll
-                path = "./CASIA1/**"
-                globity = glob.glob(path, recursive=True)
-                for path in globity:
-                    if path.endswith('jpg'):
+        if self.radioButton_7.isChecked():
+            #Mass Enroll
+            path = "./CASIA1/**"
+            globity = glob.glob(path, recursive=True)
+            for path in globity:
+                if path.endswith('jpg'):
+                    try:
                         print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2])
                         if path.split('\\')[-1].split('_')[-2] == '1' or path.split('\\')[-1].split('_')[-2] == '2':
                             enrolleye(path, '1eye_' + path.split('\\')[-1].split('_')[-3], 0 if path.split('\\')[-1].split('_')[-2] == '1' else 1 if path.split('\\')[-1].split('_')[-2] == '2' else 0)
-            except:
-                pass
+                    except:
+                        pass
         elif self.radioButton_8.isChecked():
-            path = "./CASIA1/**"
+            path = "./Motion/**"
             globity = glob.glob(path, recursive=True)
             
             for path in globity:

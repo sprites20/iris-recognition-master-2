@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "motion_poisson_083_1_3.jpg",
+    "groundtruth": "083_1_3.jpg",
+    "groundtruth_eyename": "1eye_083",
+    "side": "left",
+    "best_match_string": "./enrolledimages/91/left/3",
+    "main_keypoints": {
+        "right-side": 24,
+        "left-side": 48,
+        "bottom": 55,
+        "complete": 131
+    },
+    "matches": {
+        "right-side": 2,
+        "left-side": 5,
+        "bottom": 6,
+        "complete": 5
+    },
+    "best_match_value": 0.0836897120055517
+}

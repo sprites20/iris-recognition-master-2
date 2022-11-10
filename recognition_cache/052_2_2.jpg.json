@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "052_2_2.jpg",
+    "groundtruth": "052_2_2.jpg",
+    "groundtruth_eyename": "1eye_052",
+    "side": "right",
+    "best_match_string": "./enrolledimages/57/right/2",
+    "main_keypoints": {
+        "right-side": 170,
+        "left-side": 122,
+        "bottom": 119,
+        "complete": 420
+    },
+    "matches": {
+        "right-side": 170,
+        "left-side": 122,
+        "bottom": 119,
+        "complete": 420
+    },
+    "best_match_value": 1.0
+}
