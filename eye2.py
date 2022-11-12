@@ -42,12 +42,17 @@ def save_data():
     names_file = open('data/names.dat', 'wb')
     global folder_pair
     pickle.dump(folder_pair, names_file)
+    y = json.dumps(folder_pair, indent=4)
+        #x = json.loads(enrollcache)
+    with open('data/names.json', "w") as outfile:
+        outfile.write(y)
     names_file.close()
 def load_data():
     try:
         names_df_file = open('data/names.dat', 'rb')
         global folder_pair
         folder_pair = pickle.load(names_df_file)
+        folder_pair = json.load(open('data/names.json'))
         names_df_file.close()
     except:
         None
@@ -344,21 +349,27 @@ class Ui_MainWindow(object):
     def recognize(self, image_curr, side):
         print(image_curr)
         #Get list of eyes in same side
-        folder_nums = self.get_folders("./enrolledimages")
-        folder_num2 = {}
-        #print(folder_nums)
-        sidetext = "left" if side==0 else "right" if side==1 else "left"
-        for i in folder_nums:
-            folder_num2[i] = self.get_folders("./enrolledimages/" + i + '/' + sidetext)
-            #print(folder_num2[i])
         try:
-            shutil.rmtree('./tempeye/')
-            os.mkdir('./tempeye')
-        except:
+            folder_nums = self.get_folders("./enrolledimages")
+            folder_num2 = {}
+            #print(folder_nums)
+            sidetext = "left" if side==0 else "right" if side==1 else "left"
+            for i in folder_nums:
+                try:
+                    folder_num2[i] = self.get_folders("./enrolledimages/" + i + '/' + sidetext)
+                except:
+                    pass
+                #print(folder_num2[i])
             try:
+                shutil.rmtree('./tempeye/')
                 os.mkdir('./tempeye')
             except:
-                None
+                try:
+                    os.mkdir('./tempeye')
+                except:
+                    None
+        except:
+            pass
         rois, main_keypoints = load_rois_from_image(image_curr, './tempeye')
         #rois = load_rois_from_image(curr_image, './tempeye')
         self.label_39.setPixmap(QtGui.QPixmap("./tempeye/equalized histogram iris region.jpg"))
@@ -372,30 +383,38 @@ class Ui_MainWindow(object):
         keycache1cache = None
         key, matches, rois1, keycache1 = None, None, None, None
         for i in folder_nums:
-            for j in folder_num2[i]:
-                curr_match_value = 0
-                data = json.load(open("./enrolledimages/" + i + '/' + sidetext + '/' + j + "/info.json"))
-                ground = data["groundtruth"].split('_')
-                currmg = image_curr.split('/')[-1].split('_')
-                #print(currmg)
-                #print(ground)
-                if ground[-1] == currmg[-1] and ground[-2] == currmg[-2] and ground[-3] == currmg[-3]:
-                    print(data["groundtruth"])
-                    if first_match:
-                        key, matches, rois1, keycache1 = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', None, None)
-                        rois1cache = rois1
-                        keycache1cache = keycache1
-                        first_match = False
-                    else:
-                        key, matches = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', rois1cache, keycache1cache)
-                    #print(key)
-                    #print(matches)
-                    for pos in ['right-side','left-side','bottom','complete']:
-                        curr_match_value += matches[pos]/main_keypoints[pos]/4
-                    if curr_match_value >= best_match_value:
-                        best_match_value = curr_match_value
-                        best_match_path = "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin'
-                        best_match_string = "./enrolledimages/" + i + '/' + sidetext + '/' + j
+            try:
+                for j in folder_num2[i]:
+                    try:
+                        curr_match_value = 0
+                        data = json.load(open("./enrolledimages/" + i + '/' + sidetext + '/' + j + "/info.json"))
+                        ground = data["groundtruth"].split('_')
+                        currmg = image_curr.split('/')[-1].split('_')
+                        #print(currmg)
+                        #print(ground)
+                        #print(ground[-1], ground[-2], ground[-3])
+                        #print(currmg[-1], currmg[-2], currmg[-3])
+                        if ground[-3] == currmg[-3] and ground[-2] == currmg[-2]: #and ground[-1] == currmg[-1]:
+                            print(data["groundtruth"])
+                            if first_match:
+                                key, matches, rois1, keycache1 = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', None, None)
+                                rois1cache = rois1
+                                keycache1cache = keycache1
+                                first_match = False
+                            else:
+                                key, matches = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', rois1cache, keycache1cache)
+                            #print(key)
+                            #print(matches)
+                            for pos in ['right-side','left-side','bottom','complete']:
+                                curr_match_value += matches[pos]/main_keypoints[pos]/4
+                            if curr_match_value >= best_match_value:
+                                best_match_value = curr_match_value
+                                best_match_path = "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin'
+                                best_match_string = "./enrolledimages/" + i + '/' + sidetext + '/' + j
+                    except:
+                        pass
+            except:
+                pass
         key, matches = compare_binfiles('./tempeye/bin.bin', best_match_path, rois1cache, keycache1cache)
         self.load_matches()
         
@@ -472,28 +491,32 @@ class Ui_MainWindow(object):
     def masstest(self):
         if self.radioButton_7.isChecked():
             #Mass Enroll
-            path = "./CASIA1/**"
+            path = "./MMU2/**"
             globity = glob.glob(path, recursive=True)
             for path in globity:
+                
                 if path.endswith('jpg'):
+                    print(path)
+                    #print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2], path.split('\\')[-1].split('_')[-1])
                     try:
-                        print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2])
-                        if path.split('\\')[-1].split('_')[-2] == '1' or path.split('\\')[-1].split('_')[-2] == '2':
+                        #print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2], path.split('\\')[-1].split('_')[-1])
+                        if (path.split('\\')[-1].split('_')[-2] == '1' or path.split('\\')[-1].split('_')[-2] == '2') and path.split('\\')[-1].split('_')[-1] == '1.jpg':
                             enrolleye(path, '1eye_' + path.split('\\')[-1].split('_')[-3], 0 if path.split('\\')[-1].split('_')[-2] == '1' else 1 if path.split('\\')[-1].split('_')[-2] == '2' else 0)
-                    except:
+                            pass
+                    except Exception as e:
+                        print(e)
                         pass
         elif self.radioButton_8.isChecked():
-            path = "./Motion/**"
+            path = "./MMU2/**"
             globity = glob.glob(path, recursive=True)
-            
             for path in globity:
                 try:
                     if path.endswith('jpg'):
                         #print(path)
                         path = path.split('/')[-1].split('\\')
                         side = int(path[-1].split('_')[-2]) - 1
-                        print(path)
-                        print(side)
+                        #print(path)
+                        #print(side)
                         pathsub = ""
                         for i in path:
                             pathsub += '/' + i 
@@ -502,10 +525,10 @@ class Ui_MainWindow(object):
                         #print(mainpath)
                         global curr_image
                         curr_image = str(mainpath) + str(pathsub)
-                        print(curr_image)
+                        #print(curr_image)
                         global eyechanged
                         eyechanged = True
-                        if curr_image != "":
+                        if curr_image != "" and path[-1].split('_')[-1] == '2.jpg':
                             self.recognize(str(curr_image), side)
                 except:
                     pass

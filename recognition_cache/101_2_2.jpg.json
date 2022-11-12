@@ -1,20 +1,20 @@
 {
     "eyebeingrecognized": "101_2_2.jpg",
-    "groundtruth": "101_2_2.jpg",
+    "groundtruth": "101_2_1.jpg",
     "groundtruth_eyename": "1eye_101",
     "side": "right",
-    "best_match_string": "./enrolledimages/4/right/2",
+    "best_match_string": "./enrolledimages/4/right/1",
     "main_keypoints": {
-        "right-side": 107,
-        "left-side": 64,
-        "bottom": 44,
-        "complete": 228
+        "right-side": 113,
+        "left-side": 78,
+        "bottom": 43,
+        "complete": 246
     },
     "matches": {
-        "right-side": 97,
-        "left-side": 56,
-        "bottom": 38,
-        "complete": 197
+        "right-side": 21,
+        "left-side": 15,
+        "bottom": 10,
+        "complete": 33
     },
-    "best_match_value": 0.8773033768576071
+    "best_match_value": 0.18621322031764811
 }

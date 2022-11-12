@@ -1,0 +1,6 @@
+{
+    "groundtruth": "052_1_1.jpg",
+    "eyename": "1eye_052",
+    "side": "left",
+    "enrolldest": "./enrolledimages/157/left/1"
+}
