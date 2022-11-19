@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "BilateralBlur_001_1_1.jpg",
+    "groundtruth": "001_1_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "left",
+    "best_match_string": "./enrolledimages/1/left/1",
+    "main_keypoints": {
+        "right-side": 26,
+        "left-side": 28,
+        "bottom": 27,
+        "complete": 93
+    },
+    "matches": {
+        "right-side": 11,
+        "left-side": 12,
+        "bottom": 6,
+        "complete": 33
+    },
+    "best_match_value": 0.3571773208869983
+}

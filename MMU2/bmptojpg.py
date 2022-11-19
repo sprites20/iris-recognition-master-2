@@ -1,0 +1,25 @@
+from PIL import Image
+"""
+img = Image.open('C:/Python27/image.bmp')
+#new_img = img.resize( (256, 256) )
+new_img.save( 'C:/Python27/image.png', 'png')
+"""
+import glob
+import pathlib
+import os
+
+path = "./**"
+globity = glob.glob(path, recursive=True)
+for path in globity:
+    if path.endswith('bmp'):
+        #print(path[2: -8], path[-8:-6], path[-6:-4])
+        imgname = str(int(path[2: -8]) + 108) + '_' + path[-7:-6] + '_' + path[-5:-4] + '.jpg'
+        print(imgname)
+        img = Image.open(path)
+        if not os.path.isdir("./" + str(int(path[2: -8]) + 108)):
+            os.mkdir("./" + str(int(path[2: -8]) + 108))
+        img.save("./" + str(int(path[2: -8]) + 108) + '/' + imgname, 'jpeg')
+        try:
+            print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2])
+        except:
+            pass

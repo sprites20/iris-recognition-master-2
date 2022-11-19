@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "motion_gaussian_004_1_1.jpg",
+    "groundtruth": "004_1_1.jpg",
+    "groundtruth_eyename": "1eye_004",
+    "side": "left",
+    "best_match_string": "./enrolledimages/143/left/1",
+    "main_keypoints": {
+        "right-side": 40,
+        "left-side": 56,
+        "bottom": 38,
+        "complete": 138
+    },
+    "matches": {
+        "right-side": 1,
+        "left-side": 0,
+        "bottom": 3,
+        "complete": 7
+    },
+    "best_match_value": 0.03866800152555301
+}

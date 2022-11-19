@@ -38,7 +38,7 @@ normalsmean = 0
 mixmean = 0
 poissonblursmean = 0
 
-
+blurs = ['GaussianBlur', 'MedianBlur', 'BilateralBlur', 'MotionBlur']
 for path in globity:
     if path.endswith('json'):
         currjson = json.load(open(path))
@@ -65,10 +65,10 @@ for path in globity:
             normals = normals + 1
             normalsmean += matchvalue
         elif eyebeingrecognized[0] == 'motion':
-            if matchvalue < currlowestmotionblur:
+            if matchvalue < currlowestmix:
                 currlowestmix = matchvalue
                 strcurrlowestmix = currjson["eyebeingrecognized"]
-            if matchvalue > currhighestmotionblur:
+            if matchvalue > currhighestmix:
                 currhighestmix = matchvalue
                 strcurrhighestmix = currjson["eyebeingrecognized"]
             mix = mix + 1

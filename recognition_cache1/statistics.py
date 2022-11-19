@@ -38,7 +38,8 @@ normalsmean = 0
 mixmean = 0
 poissonblursmean = 0
 
-
+blurs = ['GaussianBlur', 'MedianBlur', 'BilateralBlur', 'MotionBlur']
+noise = 
 for path in globity:
     if path.endswith('json'):
         currjson = json.load(open(path))

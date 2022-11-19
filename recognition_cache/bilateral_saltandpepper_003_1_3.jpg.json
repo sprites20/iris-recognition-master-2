@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "bilateral_saltandpepper_003_1_3.jpg",
+    "groundtruth": "003_1_1.jpg",
+    "groundtruth_eyename": "1eye_003",
+    "side": "left",
+    "best_match_string": "./enrolledimages/132/left/1",
+    "main_keypoints": {
+        "right-side": 76,
+        "left-side": 66,
+        "bottom": 79,
+        "complete": 237
+    },
+    "matches": {
+        "right-side": 11,
+        "left-side": 10,
+        "bottom": 12,
+        "complete": 22
+    },
+    "best_match_value": 0.13524443300425978
+}

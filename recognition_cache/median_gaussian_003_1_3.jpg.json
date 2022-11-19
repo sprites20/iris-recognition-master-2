@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "median_gaussian_003_1_3.jpg",
+    "groundtruth": "003_1_1.jpg",
+    "groundtruth_eyename": "1eye_003",
+    "side": "left",
+    "best_match_string": "./enrolledimages/132/left/1",
+    "main_keypoints": {
+        "right-side": 62,
+        "left-side": 61,
+        "bottom": 71,
+        "complete": 195
+    },
+    "matches": {
+        "right-side": 9,
+        "left-side": 3,
+        "bottom": 14,
+        "complete": 15
+    },
+    "best_match_value": 0.11711194842651483
+}

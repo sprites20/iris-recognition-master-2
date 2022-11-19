@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "gaussianblur_poisson_001_2_1.jpg",
+    "groundtruth": "001_2_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "right",
+    "best_match_string": "./enrolledimages/1/right/1",
+    "main_keypoints": {
+        "right-side": 42,
+        "left-side": 37,
+        "bottom": 53,
+        "complete": 142
+    },
+    "matches": {
+        "right-side": 11,
+        "left-side": 6,
+        "bottom": 9,
+        "complete": 26
+    },
+    "best_match_value": 0.1942442090927342
+}

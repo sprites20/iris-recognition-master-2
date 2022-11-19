@@ -325,6 +325,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
         self.ButtonConnections()
+        self.getLFS()
     def load_matches(self):
         #self.label_39.setPixmap(QtGui.QPixmap("./tempeye/complete.jpg"))
         #self.label_40.setPixmap(QtGui.QPixmap("C:/Users/NakaMura/Downloads/iris-recognition-master (1)/iris-recognition-master/enrolledimages/1/left/1/complete.jpg"))
@@ -378,10 +379,12 @@ class Ui_MainWindow(object):
         best_match_value = 0
         best_match_path = ""
         best_match_string = ""
+        besti, bestj = None, None
         first_match = True
         rois1cache = None
         keycache1cache = None
         key, matches, rois1, keycache1 = None, None, None, None
+        
         for i in folder_nums:
             try:
                 for j in folder_num2[i]:
@@ -389,84 +392,151 @@ class Ui_MainWindow(object):
                         curr_match_value = 0
                         data = json.load(open("./enrolledimages/" + i + '/' + sidetext + '/' + j + "/info.json"))
                         ground = data["groundtruth"].split('_')
+                        eyename = data["eyename"]
+                        #print(eyename)
+                        #print(str(self.textEdit.toPlainText()), eyename, str(self.textEdit.toPlainText()) == eyename)
                         currmg = image_curr.split('/')[-1].split('_')
                         #print(currmg)
                         #print(ground)
                         #print(ground[-1], ground[-2], ground[-3])
                         #print(currmg[-1], currmg[-2], currmg[-3])
-                        if ground[-3] == currmg[-3] and ground[-2] == currmg[-2]: #and ground[-1] == currmg[-1]:
-                            print(data["groundtruth"])
-                            if first_match:
-                                key, matches, rois1, keycache1 = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', None, None)
-                                rois1cache = rois1
-                                keycache1cache = keycache1
-                                first_match = False
-                            else:
-                                key, matches = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', rois1cache, keycache1cache)
-                            #print(key)
-                            #print(matches)
-                            for pos in ['right-side','left-side','bottom','complete']:
-                                curr_match_value += matches[pos]/main_keypoints[pos]/4
-                            if curr_match_value >= best_match_value:
-                                best_match_value = curr_match_value
-                                best_match_path = "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin'
-                                best_match_string = "./enrolledimages/" + i + '/' + sidetext + '/' + j
+                        try:
+                            if ground[-3] == currmg[-3] and ground[-2] == currmg[-2]: #and ground[-1] == currmg[-1]:
+                                print(data["groundtruth"])
+                                if first_match:
+                                    key, matches, rois1, keycache1 = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', None, None)
+                                    rois1cache = rois1
+                                    keycache1cache = keycache1
+                                    first_match = False
+                                else:
+                                    key, matches = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', rois1cache, keycache1cache)
+                                #print(key)
+                                #print(matches)
+                                for pos in ['right-side','left-side','bottom','complete']:
+                                    curr_match_value += matches[pos]/main_keypoints[pos]/4
+                                if curr_match_value >= best_match_value:
+                                    best_match_value = curr_match_value
+                                    best_match_path = "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin'
+                                    best_match_string = "./enrolledimages/" + i + '/' + sidetext + '/' + j
+                                    besti, bestj = i, j
+                        except:
+                            if eyename == str(self.textEdit.toPlainText()):
+                                print(data["groundtruth"])
+                                #print("Match Found!")
+                                if first_match:
+                                    key, matches, rois1, keycache1 = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', None, None)
+                                    rois1cache = rois1
+                                    keycache1cache = keycache1
+                                    first_match = False
+                                else:
+                                    key, matches = compare_binfiles('./tempeye/bin.bin', "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin', rois1cache, keycache1cache)
+                                #print(key)
+                                #print(matches)
+                                for pos in ['right-side','left-side','bottom','complete']:
+                                    curr_match_value += matches[pos]/main_keypoints[pos]/4
+                                if curr_match_value >= best_match_value:
+                                    best_match_value = curr_match_value
+                                    best_match_path = "./enrolledimages/" + i + '/' + sidetext + '/' + j + '/bin.bin'
+                                    best_match_string = "./enrolledimages/" + i + '/' + sidetext + '/' + j
+                                    besti, bestj = i, j
                     except:
                         pass
             except:
                 pass
-        key, matches = compare_binfiles('./tempeye/bin.bin', best_match_path, rois1cache, keycache1cache)
-        self.load_matches()
-        
-        print(best_match_string)
-        print(main_keypoints)
-        print(matches)
-        print(str(best_match_value * 100) + "% match")
-        
-        matchjsontable = {}
-        with open(best_match_string + '/info.json', 'r') as openfile:
-            # Reading from json file
-            matchjsontable = json.load(openfile)
-            print(matchjsontable)
-        
-        
-        positivity = ""
-        if(matchjsontable["groundtruth"] == Path(image_curr).name):
-            print("Positive")
-            positivity = "Positive"
-        else:
-            print("Negative")
-            positivity = "Negative"
+        try:
+            key, matches = compare_binfiles('./tempeye/bin.bin', best_match_path, rois1cache, keycache1cache)
+            self.load_matches()
             
-        info = ""
-        info += str(best_match_path) + "\n"
-        info += str(matches) + "\n"
-        info += str(str(best_match_value * 100) + "% match") + "\n"
-        
-        #Cache JSON for Recognition
-        if not os.path.isdir("./recognition_cache"):
-            os.mkdir("./recognition_cache")
-        
-        #Takes from info.json of best match
-        recognition_cache = {
-            "eyebeingrecognized" : Path(image_curr).name,
-            "groundtruth" : matchjsontable["groundtruth"],     
-            "groundtruth_eyename" : matchjsontable["eyename"],
-            "side" : matchjsontable["side"],
-            "best_match_string" : best_match_string,
-            "main_keypoints" : main_keypoints,
-            "matches" : matches,
-            "best_match_value" : best_match_value
-        }
-        
-        with open("./recognition_cache/" + Path(image_curr).name + '.json', 'w') as openfile:
-            # Reading from json file
-            y = json.dumps(recognition_cache, indent=4)
-            openfile.write(y)
+            print(best_match_string)
+            print(main_keypoints)
+            print(matches)
+            print(str(best_match_value * 100) + "% match")
             
-        #info += str(positivity) + "\n"
-        self.textEdit_4.setText(info)
-        self.label_40.setPixmap(QtGui.QPixmap("./enrolledimages/" + i + '/' + sidetext + '/' + j + '/equalized histogram iris region.jpg'))
+            matchjsontable = {}
+            with open(best_match_string + '/info.json', 'r') as openfile:
+                # Reading from json file
+                matchjsontable = json.load(openfile)
+                print(matchjsontable)
+            
+            
+            positivity = ""
+            if(matchjsontable["groundtruth"] == Path(image_curr).name):
+                print("Positive")
+                positivity = "Positive"
+            else:
+                print("Negative")
+                positivity = "Negative"
+                
+            info = ""
+            info += str(best_match_path) + "\n"
+            info += str(matches) + "\n"
+            info += str(str(best_match_value * 100) + "% match") + "\n"
+            
+            #Cache JSON for Recognition
+            if not os.path.isdir("./recognition_cache"):
+                os.mkdir("./recognition_cache")
+            
+            #Takes from info.json of best match
+            recognition_cache = {
+                "eyebeingrecognized" : Path(image_curr).name,
+                "groundtruth" : matchjsontable["groundtruth"],     
+                "groundtruth_eyename" : matchjsontable["eyename"],
+                "side" : matchjsontable["side"],
+                "best_match_string" : best_match_string,
+                "main_keypoints" : main_keypoints,
+                "matches" : matches,
+                "best_match_value" : best_match_value
+            }
+            
+            with open("./recognition_cache/" + Path(image_curr).name + '.json', 'w') as openfile:
+                # Reading from json file
+                y = json.dumps(recognition_cache, indent=4)
+                openfile.write(y)
+            
+            #info += str(positivity) + "\n"
+            self.textEdit_4.setText(info)
+            self.label_40.setPixmap(QtGui.QPixmap("./enrolledimages/" + besti + '/' + sidetext + '/' + bestj + '/equalized histogram iris region.jpg'))
+        except:
+            print("Error: Name not Found!")
+    def getLFS(self):
+        print("Getting LFS")
+        lfs = {}
+        path = "./recognition_cache/**"
+        globity = glob.glob(path, recursive=True)
+        for path in globity:
+            if path.endswith('json'):
+                currjson = json.load(open(path))
+                #print(currjson)
+                if len(currjson["eyebeingrecognized"].split('_')) > 3:
+                    if currjson["eyebeingrecognized"].split('_')[-3] == currjson["groundtruth"].split('_')[-3] and currjson["eyebeingrecognized"].split('_')[-2] == currjson["groundtruth"].split('_')[-2]:
+                        if len(currjson["eyebeingrecognized"].split('_')) != 3:
+                            prefix = currjson["eyebeingrecognized"].split('_')
+                            prefix2 = ""
+                            for i in range(0,len(prefix[0:-3])):
+                                prefix2 += prefix[i] + '_'
+                            somename = prefix2 + currjson["groundtruth_eyename"]
+                            
+                            if not somename in lfs:
+                                #print(True)
+                                lfs[somename] = 1
+                            if currjson["best_match_value"] < lfs[somename]:
+                                lfs[somename] = currjson["best_match_value"]
+                elif len(currjson["eyebeingrecognized"].split('_')) == 3:
+                    #print(currjson["eyebeingrecognized"].split('_'))
+                    if currjson["eyebeingrecognized"].split('_')[-3] == currjson["groundtruth"].split('_')[-3] and currjson["eyebeingrecognized"].split('_')[-2] == currjson["groundtruth"].split('_')[-2]:
+                        if not str(currjson["groundtruth_eyename"]) in lfs:
+                            #print(True)
+                            lfs[str(currjson["groundtruth_eyename"])] = 1
+                        if currjson["best_match_value"] < lfs[str(currjson["groundtruth_eyename"])]:
+                            lfs[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
+                elif currjson["eyebeingrecognized"] == currjson["groundtruth"]:
+                    #print(currjson["eyebeingrecognized"], currjson["groundtruth"], True)
+                    if not str(currjson["groundtruth_eyename"]) in lfs:
+                        #print(True)
+                        lfs[str(currjson["groundtruth_eyename"])] = 1
+                    if currjson["best_match_value"] < lfs[str(currjson["groundtruth_eyename"])]:
+                        lfs[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
+        print(lfs)
     def thisenroll(self):
         global eyechanged
         side = 0 if self.radioButton.isChecked() else 1 if self.radioButton_2.isChecked() else 0
@@ -507,31 +577,38 @@ class Ui_MainWindow(object):
                         print(e)
                         pass
         elif self.radioButton_8.isChecked():
-            path = "./MMU2/**"
-            globity = glob.glob(path, recursive=True)
-            for path in globity:
-                try:
-                    if path.endswith('jpg'):
-                        #print(path)
-                        path = path.split('/')[-1].split('\\')
-                        side = int(path[-1].split('_')[-2]) - 1
-                        #print(path)
-                        #print(side)
-                        pathsub = ""
-                        for i in path:
-                            pathsub += '/' + i 
-                        #print(path)
-                        mainpath = pathlib.Path(__file__).parent.resolve()
-                        #print(mainpath)
-                        global curr_image
-                        curr_image = str(mainpath) + str(pathsub)
-                        #print(curr_image)
-                        global eyechanged
-                        eyechanged = True
-                        if curr_image != "" and path[-1].split('_')[-1] == '2.jpg':
-                            self.recognize(str(curr_image), side)
-                except:
-                    pass
+            #datas = ["normals", "gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
+            datas = ["normals"]
+            for i in datas:
+                path = "./1-5/" + i + "/**"
+                globity = glob.glob(path, recursive=True)
+                for path in globity:
+                    try:
+                        if path.endswith('jpg'):
+                            print(path)
+                            path = path.split('/')[-1].split('\\')
+                            side = int(path[-1].split('_')[-2]) - 1
+                            num = int(path[-1].split('_')[-3])
+                            #print(path)
+                            #print(side)
+                            pathsub = ""
+                            for i in path:
+                                pathsub += '/' + i 
+                            #print(path)
+                            mainpath = pathlib.Path(__file__).parent.resolve()
+                            #print(mainpath)
+                            global curr_image
+                            curr_image = str(mainpath) + '/1-5' + str(pathsub)
+                            print(curr_image)
+                            global eyechanged
+                            eyechanged = True
+                            if curr_image != "" and path[-1].split('_')[-1] == '2.jpg' or path[-1].split('_')[-1] == '1.jpg' or path[-1].split('_')[-1] == '3.jpg':
+                                if num in range(1,10) or num in range(109,119):         #Split
+                                    print(num)
+                                    self.recognize(str(curr_image), side)
+                                #self.recognize(str(curr_image), side)
+                    except:
+                        pass
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -569,7 +646,6 @@ class Ui_MainWindow(object):
         self.label_17.setText(_translate("MainWindow", "Eye Info"))
         self.label_18.setText(_translate("MainWindow", "Settings"))
         self.pushButton_2.setText(_translate("MainWindow", "Mass Process"))
-
 
 if __name__ == "__main__":
     import sys

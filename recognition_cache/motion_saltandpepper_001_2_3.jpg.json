@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "motion_saltandpepper_001_2_3.jpg",
+    "groundtruth": "001_2_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "right",
+    "best_match_string": "./enrolledimages/1/right/1",
+    "main_keypoints": {
+        "right-side": 44,
+        "left-side": 61,
+        "bottom": 73,
+        "complete": 191
+    },
+    "matches": {
+        "right-side": 3,
+        "left-side": 4,
+        "bottom": 9,
+        "complete": 9
+    },
+    "best_match_value": 0.07604091968866643
+}

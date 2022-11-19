@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "bilateral_speckle_004_1_1.jpg",
+    "groundtruth": "004_1_1.jpg",
+    "groundtruth_eyename": "1eye_004",
+    "side": "left",
+    "best_match_string": "./enrolledimages/143/left/1",
+    "main_keypoints": {
+        "right-side": 33,
+        "left-side": 59,
+        "bottom": 62,
+        "complete": 157
+    },
+    "matches": {
+        "right-side": 13,
+        "left-side": 14,
+        "bottom": 7,
+        "complete": 38
+    },
+    "best_match_value": 0.24654224297489385
+}

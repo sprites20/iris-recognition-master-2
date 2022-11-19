@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "median_speckle_005_2_2.jpg",
+    "groundtruth": "005_2_1.jpg",
+    "groundtruth_eyename": "1eye_005",
+    "side": "right",
+    "best_match_string": "./enrolledimages/154/right/1",
+    "main_keypoints": {
+        "right-side": 37,
+        "left-side": 28,
+        "bottom": 42,
+        "complete": 118
+    },
+    "matches": {
+        "right-side": 3,
+        "left-side": 4,
+        "bottom": 2,
+        "complete": 5
+    },
+    "best_match_value": 0.07848253822830094
+}

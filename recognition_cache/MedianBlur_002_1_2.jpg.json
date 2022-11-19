@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "MedianBlur_002_1_2.jpg",
+    "groundtruth": "002_1_1.jpg",
+    "groundtruth_eyename": "1eye_002",
+    "side": "left",
+    "best_match_string": "./enrolledimages/112/left/1",
+    "main_keypoints": {
+        "right-side": 69,
+        "left-side": 52,
+        "bottom": 42,
+        "complete": 179
+    },
+    "matches": {
+        "right-side": 8,
+        "left-side": 11,
+        "bottom": 15,
+        "complete": 33
+    },
+    "best_match_value": 0.21724522239156682
+}
