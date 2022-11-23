@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "GaussianBlur_112_1_1.jpg",
+    "groundtruth": "112_1_1.jpg",
+    "groundtruth_eyename": "1eye_112",
+    "side": "left",
+    "best_match_string": "./enrolledimages/16/left/1",
+    "main_keypoints": {
+        "right-side": 13,
+        "left-side": 21,
+        "bottom": 14,
+        "complete": 47
+    },
+    "matches": {
+        "right-side": 6,
+        "left-side": 4,
+        "bottom": 6,
+        "complete": 12
+    },
+    "best_match_value": 0.33397630738056266
+}

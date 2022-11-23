@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "median_poisson_111_1_2.jpg",
+    "groundtruth": "111_1_1.jpg",
+    "groundtruth_eyename": "1eye_111",
+    "side": "left",
+    "best_match_string": "./enrolledimages/15/left/1",
+    "main_keypoints": {
+        "right-side": 19,
+        "left-side": 18,
+        "bottom": 19,
+        "complete": 54
+    },
+    "matches": {
+        "right-side": 4,
+        "left-side": 3,
+        "bottom": 6,
+        "complete": 9
+    },
+    "best_match_value": 0.21491228070175436
+}

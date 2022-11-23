@@ -578,14 +578,16 @@ class Ui_MainWindow(object):
                         pass
         elif self.radioButton_8.isChecked():
             #datas = ["normals", "gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
-            datas = ["normals"]
+            #datas = ["normals"]
+            #datas = ["gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
+            datas = ["All Lucy"]
             for i in datas:
                 path = "./1-5/" + i + "/**"
                 globity = glob.glob(path, recursive=True)
                 for path in globity:
                     try:
                         if path.endswith('jpg'):
-                            #print(path)
+                            print(path)
                             path = path.split('/')[-1].split('\\')
                             side = int(path[-1].split('_')[-2]) - 1
                             num = int(path[-1].split('_')[-3])
@@ -598,7 +600,7 @@ class Ui_MainWindow(object):
                             mainpath = pathlib.Path(__file__).parent.resolve()
                             #print(mainpath)
                             global curr_image
-                            curr_image = str(mainpath) + '/1-5' + str(pathsub)
+                            curr_image = str(mainpath) + '/109-114' + str(pathsub)
                             print(curr_image)
                             global eyechanged
                             eyechanged = True

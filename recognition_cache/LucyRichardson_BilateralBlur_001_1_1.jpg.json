@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_BilateralBlur_001_1_1.jpg",
+    "groundtruth": "001_1_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "left",
+    "best_match_string": "./enrolledimages/1/left/1",
+    "main_keypoints": {
+        "right-side": 101,
+        "left-side": 98,
+        "bottom": 92,
+        "complete": 302
+    },
+    "matches": {
+        "right-side": 18,
+        "left-side": 16,
+        "bottom": 11,
+        "complete": 40
+    },
+    "best_match_value": 0.14837466910543984
+}

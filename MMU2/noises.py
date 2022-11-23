@@ -173,7 +173,7 @@ def gaussian(img, comb):
     if not comb:
         gimg = plotnoise(img, "gaussian", r, c, 7, False)
         img = img.split('\\')[-1]
-        plt.imsave("./gaussian/gaussian" + img, gimg)
+        plt.imsave("./gaussian/gaussian_" + img, gimg)
     else:
         gimg = plotnoise(img, "gaussian", r, c, 7, True)
         return gimg
@@ -341,7 +341,7 @@ for path in globity:
         #print(path2[-3].split('\\')[-2])
         
         if path2[-1] == '2.jpg' or path2[-1] == '1.jpg' or path2[-1] == '3.jpg':
-            if int(path2[-3].split('\\')[-2]) in range(1,6) or path2 in range(109,109+5):
+            if int(path2[-3].split('\\')[-2]) in range(109,109+5): #int(path2[-3].split('\\')[-2]) in range(1,6) or 
                 motion(path, False)
                 poisson(path, False)
                 gaussianblur(path, False)
@@ -357,7 +357,7 @@ for path in globity:
         
         if path2[-1] == '2.jpg' or path2[-1] == '1.jpg' or path2[-1] == '3.jpg':
             #print(path2[3].split[])
-            if int(path2[-3].split('\\')[-1]) in range(1,6) or int(path2[-3].split('\\')[-1]) in range(109,109+5):
+            if int(path2[-3].split('\\')[-1]) in range(109,109+5): #int(path2[-3].split('\\')[-1]) in range(1,6) or 
                 image = cv2.imread(path)
                 img = path.split('\\')[-1]
                 cv2.imwrite("./normals/" + img, image)

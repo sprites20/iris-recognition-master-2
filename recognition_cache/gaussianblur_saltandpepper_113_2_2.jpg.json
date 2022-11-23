@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "gaussianblur_saltandpepper_113_2_2.jpg",
+    "groundtruth": "113_2_1.jpg",
+    "groundtruth_eyename": "1eye_113",
+    "side": "right",
+    "best_match_string": "./enrolledimages/17/right/1",
+    "main_keypoints": {
+        "right-side": 14,
+        "left-side": 8,
+        "bottom": 7,
+        "complete": 23
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 4,
+        "bottom": 1,
+        "complete": 3
+    },
+    "best_match_value": 0.19332298136645962
+}

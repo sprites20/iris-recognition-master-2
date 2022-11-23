@@ -5,16 +5,16 @@
     "side": "left",
     "best_match_string": "./enrolledimages/15/left/1",
     "main_keypoints": {
-        "right-side": 52,
-        "left-side": 51,
-        "bottom": 49,
-        "complete": 157
+        "right-side": 45,
+        "left-side": 59,
+        "bottom": 50,
+        "complete": 154
     },
     "matches": {
-        "right-side": 25,
-        "left-side": 26,
-        "bottom": 24,
-        "complete": 83
+        "right-side": 27,
+        "left-side": 38,
+        "bottom": 27,
+        "complete": 94
     },
-    "best_match_value": 0.5022578727718428
+    "best_match_value": 0.5986143517499449
 }

@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_bilateral_gaussian_004_1_3.jpg",
+    "groundtruth": "004_1_1.jpg",
+    "groundtruth_eyename": "1eye_004",
+    "side": "left",
+    "best_match_string": "./enrolledimages/143/left/1",
+    "main_keypoints": {
+        "right-side": 41,
+        "left-side": 40,
+        "bottom": 39,
+        "complete": 125
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 2,
+        "bottom": 3,
+        "complete": 3
+    },
+    "best_match_value": 0.03773076923076923
+}

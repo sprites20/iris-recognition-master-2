@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "median_saltandpepper_112_1_3.jpg",
+    "groundtruth": "112_1_1.jpg",
+    "groundtruth_eyename": "1eye_112",
+    "side": "left",
+    "best_match_string": "./enrolledimages/16/left/1",
+    "main_keypoints": {
+        "right-side": 19,
+        "left-side": 27,
+        "bottom": 21,
+        "complete": 68
+    },
+    "matches": {
+        "right-side": 1,
+        "left-side": 6,
+        "bottom": 0,
+        "complete": 4
+    },
+    "best_match_value": 0.08341933264533884
+}

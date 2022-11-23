@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "gaussianblur_speckle_113_1_3.jpg",
+    "groundtruth": "113_1_1.jpg",
+    "groundtruth_eyename": "1eye_113",
+    "side": "left",
+    "best_match_string": "./enrolledimages/17/left/1",
+    "main_keypoints": {
+        "right-side": 16,
+        "left-side": 15,
+        "bottom": 6,
+        "complete": 36
+    },
+    "matches": {
+        "right-side": 1,
+        "left-side": 1,
+        "bottom": 1,
+        "complete": 1
+    },
+    "best_match_value": 0.08090277777777777
+}

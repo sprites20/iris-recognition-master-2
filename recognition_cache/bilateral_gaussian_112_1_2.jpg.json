@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "bilateral_gaussian_112_1_2.jpg",
+    "groundtruth": "112_1_1.jpg",
+    "groundtruth_eyename": "1eye_112",
+    "side": "left",
+    "best_match_string": "./enrolledimages/16/left/1",
+    "main_keypoints": {
+        "right-side": 13,
+        "left-side": 23,
+        "bottom": 18,
+        "complete": 55
+    },
+    "matches": {
+        "right-side": 3,
+        "left-side": 4,
+        "bottom": 1,
+        "complete": 4
+    },
+    "best_match_value": 0.13324127563257998
+}
