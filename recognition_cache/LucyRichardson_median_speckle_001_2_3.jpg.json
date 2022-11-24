@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_median_speckle_001_2_3.jpg",
+    "groundtruth": "001_2_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "right",
+    "best_match_string": "./enrolledimages/1/right/1",
+    "main_keypoints": {
+        "right-side": 64,
+        "left-side": 45,
+        "bottom": 59,
+        "complete": 183
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 5,
+        "bottom": 1,
+        "complete": 1
+    },
+    "best_match_value": 0.033381186131950236
+}

@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_MotionBlur_001_2_3.jpg",
+    "groundtruth": "001_2_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "right",
+    "best_match_string": "./enrolledimages/1/right/1",
+    "main_keypoints": {
+        "right-side": 112,
+        "left-side": 126,
+        "bottom": 116,
+        "complete": 365
+    },
+    "matches": {
+        "right-side": 5,
+        "left-side": 0,
+        "bottom": 5,
+        "complete": 0
+    },
+    "best_match_value": 0.021936576354679806
+}

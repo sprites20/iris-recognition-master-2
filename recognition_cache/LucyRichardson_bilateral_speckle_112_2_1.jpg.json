@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_bilateral_speckle_112_2_1.jpg",
+    "groundtruth": "112_2_1.jpg",
+    "groundtruth_eyename": "1eye_112",
+    "side": "right",
+    "best_match_string": "./enrolledimages/16/right/1",
+    "main_keypoints": {
+        "right-side": 18,
+        "left-side": 24,
+        "bottom": 27,
+        "complete": 66
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 6,
+        "bottom": 1,
+        "complete": 0
+    },
+    "best_match_value": 0.07175925925925926
+}

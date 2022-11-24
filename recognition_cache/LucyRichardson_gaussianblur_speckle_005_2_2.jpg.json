@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_gaussianblur_speckle_005_2_2.jpg",
+    "groundtruth": "005_2_1.jpg",
+    "groundtruth_eyename": "1eye_005",
+    "side": "right",
+    "best_match_string": "./enrolledimages/154/right/1",
+    "main_keypoints": {
+        "right-side": 73,
+        "left-side": 59,
+        "bottom": 52,
+        "complete": 197
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 0,
+        "bottom": 3,
+        "complete": 11
+    },
+    "best_match_value": 0.028382467786021087
+}

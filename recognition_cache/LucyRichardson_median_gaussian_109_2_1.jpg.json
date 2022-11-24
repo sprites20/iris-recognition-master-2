@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_median_gaussian_109_2_1.jpg",
+    "groundtruth": "109_2_1.jpg",
+    "groundtruth_eyename": "1eye_109",
+    "side": "right",
+    "best_match_string": "./enrolledimages/12/right/1",
+    "main_keypoints": {
+        "right-side": 24,
+        "left-side": 13,
+        "bottom": 15,
+        "complete": 55
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 1,
+        "bottom": 1,
+        "complete": 2
+    },
+    "best_match_value": 0.04498834498834499
+}

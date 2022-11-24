@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_bilateral_saltandpepper_110_1_1.jpg",
+    "groundtruth": "110_1_1.jpg",
+    "groundtruth_eyename": "1eye_110",
+    "side": "left",
+    "best_match_string": "./enrolledimages/14/left/1",
+    "main_keypoints": {
+        "right-side": 48,
+        "left-side": 22,
+        "bottom": 32,
+        "complete": 104
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 2,
+        "bottom": 0,
+        "complete": 1
+    },
+    "best_match_value": 0.02513111888111888
+}

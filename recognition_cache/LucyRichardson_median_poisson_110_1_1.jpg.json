@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_median_poisson_110_1_1.jpg",
+    "groundtruth": "110_1_1.jpg",
+    "groundtruth_eyename": "1eye_110",
+    "side": "left",
+    "best_match_string": "./enrolledimages/14/left/1",
+    "main_keypoints": {
+        "right-side": 23,
+        "left-side": 22,
+        "bottom": 25,
+        "complete": 73
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 0,
+        "bottom": 2,
+        "complete": 0
+    },
+    "best_match_value": 0.02
+}

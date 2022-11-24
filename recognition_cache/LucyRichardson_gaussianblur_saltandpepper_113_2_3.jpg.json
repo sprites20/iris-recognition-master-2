@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_gaussianblur_saltandpepper_113_2_3.jpg",
+    "groundtruth": "113_2_1.jpg",
+    "groundtruth_eyename": "1eye_113",
+    "side": "right",
+    "best_match_string": "./enrolledimages/17/right/1",
+    "main_keypoints": {
+        "right-side": 45,
+        "left-side": 37,
+        "bottom": 44,
+        "complete": 122
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 1,
+        "bottom": 0,
+        "complete": 1
+    },
+    "best_match_value": 0.00880593708462561
+}

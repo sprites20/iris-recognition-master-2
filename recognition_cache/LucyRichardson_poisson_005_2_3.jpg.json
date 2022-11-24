@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_poisson_005_2_3.jpg",
+    "groundtruth": "005_2_1.jpg",
+    "groundtruth_eyename": "1eye_005",
+    "side": "right",
+    "best_match_string": "./enrolledimages/154/right/1",
+    "main_keypoints": {
+        "right-side": 89,
+        "left-side": 98,
+        "bottom": 92,
+        "complete": 290
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 1,
+        "bottom": 2,
+        "complete": 4
+    },
+    "best_match_value": 0.011434078878927882
+}

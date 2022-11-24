@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "LucyRichardson_GaussianBlur_109_1_1.jpg",
+    "groundtruth": "109_1_1.jpg",
+    "groundtruth_eyename": "1eye_109",
+    "side": "left",
+    "best_match_string": "./enrolledimages/12/left/1",
+    "main_keypoints": {
+        "right-side": 21,
+        "left-side": 23,
+        "bottom": 59,
+        "complete": 100
+    },
+    "matches": {
+        "right-side": 0,
+        "left-side": 1,
+        "bottom": 2,
+        "complete": 0
+    },
+    "best_match_value": 0.019344141488577743
+}
