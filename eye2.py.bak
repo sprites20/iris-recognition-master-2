@@ -509,7 +509,7 @@ class Ui_MainWindow(object):
                 #print(currjson)
                 if len(currjson["eyebeingrecognized"].split('_')) > 3:
                     if currjson["eyebeingrecognized"].split('_')[-3] == currjson["groundtruth"].split('_')[-3] and currjson["eyebeingrecognized"].split('_')[-2] == currjson["groundtruth"].split('_')[-2]:
-                        if len(currjson["eyebeingrecognized"].split('_')) != 3:
+                        if len(currjson["eyebeingrecognized"].split('_')) != 3 and currjson["best_match_value"] != 0:
                             prefix = currjson["eyebeingrecognized"].split('_')
                             prefix2 = ""
                             for i in range(0,len(prefix[0:-3])):
@@ -519,7 +519,7 @@ class Ui_MainWindow(object):
                             if not somename in lfs:
                                 #print(True)
                                 lfs[somename] = 1
-                            if currjson["best_match_value"] < lfs[somename]:
+                            if currjson["best_match_value"] < lfs[somename] and currjson["best_match_value"] != 0:
                                 lfs[somename] = currjson["best_match_value"]
                 elif len(currjson["eyebeingrecognized"].split('_')) == 3:
                     #print(currjson["eyebeingrecognized"].split('_'))
@@ -534,7 +534,7 @@ class Ui_MainWindow(object):
                     if not str(currjson["groundtruth_eyename"]) in lfs:
                         #print(True)
                         lfs[str(currjson["groundtruth_eyename"])] = 1
-                    if currjson["best_match_value"] < lfs[str(currjson["groundtruth_eyename"])]:
+                    if currjson["best_match_value"] < lfs[str(currjson["groundtruth_eyename"])] and currjson["best_match_value"] != 0:
                         lfs[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
         print(lfs)
     def thisenroll(self):
@@ -578,11 +578,11 @@ class Ui_MainWindow(object):
                         pass
         elif self.radioButton_8.isChecked():
             #datas = ["normals", "gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
-            #datas = ["normals"]
-            #datas = ["gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
-            datas = ["All Lucy"]
+            #datas = ["normals"] , "poisson", "gaussianblur", "median", "bilateral", "motion"
+            datas = ["speckle", "saltandpepper"]
+            #datas = ["All Lucy"]
             for i in datas:
-                path = "./1-5/" + i + "/**"
+                path = "./109-114/" + i + "/**"
                 globity = glob.glob(path, recursive=True)
                 for path in globity:
                     try:

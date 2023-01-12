@@ -33,10 +33,13 @@ filepath2 = r'./aeval2.bmp'
 
 folder_pair = {}
 eye_arr = []
+lms = {}
+confusion_matrix = [0,0,0,0]
+errored_detection = 0
 
 #compare_binfiles("C:/Users/NakaMura/Downloads/iris-recognition-master (1)/iris-recognition-master/enrolledimages/1/left/1/bin.bin", "C:/Users/NakaMura/Downloads/iris-recognition-master (1)/iris-recognition-master/enrolledimages/1/left/1/bin.bin")
 
-from numba import jit, cuda
+#from numba import jit, cuda
 
 def save_data():
     names_file = open('data/names.dat', 'wb')
@@ -58,8 +61,6 @@ def load_data():
         None
 
 currentimage = ""
-
-
 
 def get_folders(MYDIR):
     folder_nums = []
@@ -325,7 +326,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         
         self.ButtonConnections()
-        self.getLFS()
+        self.getlms()
     def load_matches(self):
         #self.label_39.setPixmap(QtGui.QPixmap("./tempeye/complete.jpg"))
         #self.label_40.setPixmap(QtGui.QPixmap("C:/Users/NakaMura/Downloads/iris-recognition-master (1)/iris-recognition-master/enrolledimages/1/left/1/complete.jpg"))
@@ -384,7 +385,8 @@ class Ui_MainWindow(object):
         rois1cache = None
         keycache1cache = None
         key, matches, rois1, keycache1 = None, None, None, None
-        
+        global confusion_matrix
+        global errored_detection
         for i in folder_nums:
             try:
                 for j in folder_num2[i]:
@@ -492,15 +494,39 @@ class Ui_MainWindow(object):
                 # Reading from json file
                 y = json.dumps(recognition_cache, indent=4)
                 openfile.write(y)
-            
+            try:
+                curr_lms = lms[matchjsontable["eyename"]]
+                curr_rec = recognition_cache["groundtruth"].split("_")
+                curr_matching = Path(image_curr).name.split("_")
+                eyes_matched = curr_rec[0] == curr_matching[0] and curr_rec[1] == curr_matching[1]
+                print("Match:", best_match_value, "Required:", curr_lms)
+                print("Match:", curr_matching, "Required:", curr_rec)
+                if curr_lms <= best_match_value:
+                    if eyes_matched:
+                        confusion_matrix[0] += 1
+                        print("True Positive")
+                    else:
+                        confusion_matrix[1] += 1
+                        print("False Positive")
+                else:
+                    if eyes_matched:
+                        confusion_matrix[4] += 1
+                        print("False Negative")
+                    else:
+                        confusion_matrix[3] += 1
+                        print("True Negative")
+            except Exception as e:
+                print("Eye LMS not found!")
+                errored_detection += 1
             #info += str(positivity) + "\n"
             self.textEdit_4.setText(info)
             self.label_40.setPixmap(QtGui.QPixmap("./enrolledimages/" + besti + '/' + sidetext + '/' + bestj + '/equalized histogram iris region.jpg'))
         except:
             print("Error: Name not Found!")
-    def getLFS(self):
-        print("Getting LFS")
-        lfs = {}
+    def getlms(self):
+        print("Getting lms")
+        global lms
+        lms = {}
         path = "./recognition_cache/**"
         globity = glob.glob(path, recursive=True)
         for path in globity:
@@ -509,34 +535,35 @@ class Ui_MainWindow(object):
                 #print(currjson)
                 if len(currjson["eyebeingrecognized"].split('_')) > 3:
                     if currjson["eyebeingrecognized"].split('_')[-3] == currjson["groundtruth"].split('_')[-3] and currjson["eyebeingrecognized"].split('_')[-2] == currjson["groundtruth"].split('_')[-2]:
-                        if len(currjson["eyebeingrecognized"].split('_')) != 3:
+                        if len(currjson["eyebeingrecognized"].split('_')) != 3 and currjson["best_match_value"] != 0:
                             prefix = currjson["eyebeingrecognized"].split('_')
                             prefix2 = ""
                             for i in range(0,len(prefix[0:-3])):
                                 prefix2 += prefix[i] + '_'
                             somename = prefix2 + currjson["groundtruth_eyename"]
                             
-                            if not somename in lfs:
+                            if not somename in lms:
                                 #print(True)
-                                lfs[somename] = 1
-                            if currjson["best_match_value"] < lfs[somename]:
-                                lfs[somename] = currjson["best_match_value"]
+                                lms[somename] = 1
+                            if currjson["best_match_value"] < lms[somename] and currjson["best_match_value"] != 0:
+                                lms[somename] = currjson["best_match_value"]
                 elif len(currjson["eyebeingrecognized"].split('_')) == 3:
                     #print(currjson["eyebeingrecognized"].split('_'))
                     if currjson["eyebeingrecognized"].split('_')[-3] == currjson["groundtruth"].split('_')[-3] and currjson["eyebeingrecognized"].split('_')[-2] == currjson["groundtruth"].split('_')[-2]:
-                        if not str(currjson["groundtruth_eyename"]) in lfs:
+                        if not str(currjson["groundtruth_eyename"]) in lms:
                             #print(True)
-                            lfs[str(currjson["groundtruth_eyename"])] = 1
-                        if currjson["best_match_value"] < lfs[str(currjson["groundtruth_eyename"])]:
-                            lfs[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
+                            lms[str(currjson["groundtruth_eyename"])] = 1
+                        if currjson["best_match_value"] < lms[str(currjson["groundtruth_eyename"])]:
+                            lms[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
                 elif currjson["eyebeingrecognized"] == currjson["groundtruth"]:
                     #print(currjson["eyebeingrecognized"], currjson["groundtruth"], True)
-                    if not str(currjson["groundtruth_eyename"]) in lfs:
+                    if not str(currjson["groundtruth_eyename"]) in lms:
                         #print(True)
-                        lfs[str(currjson["groundtruth_eyename"])] = 1
-                    if currjson["best_match_value"] < lfs[str(currjson["groundtruth_eyename"])]:
-                        lfs[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
-        print(lfs)
+                        lms[str(currjson["groundtruth_eyename"])] = 1
+                    if currjson["best_match_value"] < lms[str(currjson["groundtruth_eyename"])] and currjson["best_match_value"] != 0:
+                        lms[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
+        print(lms)
+        #lms[]
     def thisenroll(self):
         global eyechanged
         side = 0 if self.radioButton.isChecked() else 1 if self.radioButton_2.isChecked() else 0
@@ -558,6 +585,7 @@ class Ui_MainWindow(object):
         elif self.radioButton_8.isChecked():
             print(curr_image)
             self.recognize(str(curr_image), side)
+            
     def masstest(self):
         if self.radioButton_7.isChecked():
             #Mass Enroll
@@ -578,9 +606,9 @@ class Ui_MainWindow(object):
                         pass
         elif self.radioButton_8.isChecked():
             #datas = ["normals", "gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
-            #datas = ["normals"]
-            #datas = ["gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
-            datas = ["All Lucy"]
+            #datas = ["normals"] , "poisson", "gaussianblur", "median", "bilateral", "motion"
+            #datas = ["speckle", "saltandpepper"]
+            datas = ["normals"]
             for i in datas:
                 path = "./1-5/" + i + "/**"
                 globity = glob.glob(path, recursive=True)
@@ -609,6 +637,8 @@ class Ui_MainWindow(object):
                                     print(num)
                                     self.recognize(str(curr_image), side)
                                 #self.recognize(str(curr_image), side)
+                            global confusion_matrix
+                            print(confusion_matrix)
                     except:
                         pass
     def retranslateUi(self, MainWindow):
