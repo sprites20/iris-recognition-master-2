@@ -510,10 +510,10 @@ class Ui_MainWindow(object):
                         print("False Positive")
                 else:
                     if eyes_matched:
-                        confusion_matrix[4] += 1
+                        confusion_matrix[3] += 1
                         print("False Negative")
                     else:
-                        confusion_matrix[3] += 1
+                        confusion_matrix[2] += 1
                         print("True Negative")
             except Exception as e:
                 print("Eye LMS not found!")
@@ -585,7 +585,90 @@ class Ui_MainWindow(object):
         elif self.radioButton_8.isChecked():
             print(curr_image)
             self.recognize(str(curr_image), side)
-            
+    def calculate_metrics(self, tp, fp, tn, fn):
+        # = confusion_matrix(y_true, y_pred).ravel()
+        try:
+            P = tp + fn
+            N = tn + fp
+            TPR = tp / P
+        except:
+            TPR = None
+        try:
+            TNR = tn / N
+        except:
+            TNR = None
+        try:
+            PPV = tp / (tp + fp)
+        except:
+            PPV = None
+        try:
+            NPV = tn / (tn + fn)
+        except:
+            NPV = None
+        try:
+            FNR = fn / P
+        except:
+            FNR = None
+        try:
+            FPR = fp / N
+        except:
+            FPR = None
+        try:
+            FDR = fp / (fp + tp)
+        except:
+            FDR = None
+        try:
+            FOR = fn / (fn + tn)
+        except:
+            FOR = None
+        try:
+            ACC = (tp + tn) / (P + N)
+        except:
+            ACC = None
+        try:
+            FM = 2*(PPV * TPR) / (PPV + TPR)
+        except:
+            FM = None
+        try:
+            DOR = TPR / FPR
+        except:
+            DOR = None
+        try:
+            prevalence = P / (P + N)
+        except:
+            prevalence = None
+        try:
+            F1_score = 2*((PPV * TPR) / (PPV + TPR))
+        except:
+            F1_score = None
+        condition_positive = P
+        condition_negative = N
+        true_positive = tp
+        true_negative = tn
+        false_positive = fp
+        false_negative = fn
+        metrics = {
+            "TPR": TPR,
+            "TNR": TNR,
+            "PPV": PPV,
+            "NPV": NPV,
+            "FNR": FNR,
+            "FPR": FPR,
+            "FDR": FDR,
+            "FOR": FOR,
+            "ACC": ACC,
+            "FM": FM,
+            "DOR": DOR,
+            "condition_positive": condition_positive,
+            "condition_negative": condition_negative,
+            "true_positive": true_positive,
+            "true_negative": true_negative,
+            "false_positive": false_positive,
+            "false_negative": false_negative,
+            "prevalence": prevalence,
+            "F1_score": F1_score
+        }
+        return metrics        
     def masstest(self):
         if self.radioButton_7.isChecked():
             #Mass Enroll
@@ -609,6 +692,7 @@ class Ui_MainWindow(object):
             #datas = ["normals"] , "poisson", "gaussianblur", "median", "bilateral", "motion"
             #datas = ["speckle", "saltandpepper"]
             datas = ["normals"]
+            print(self.calculate_metrics(27, 0, 0, 3))
             for i in datas:
                 path = "./1-5/" + i + "/**"
                 globity = glob.glob(path, recursive=True)
@@ -641,6 +725,7 @@ class Ui_MainWindow(object):
                             print(confusion_matrix)
                     except:
                         pass
+            print(self.calculate_metrics(confusion_matrix[0], confusion_matrix[1], confusion_matrix[2], confusion_matrix[3]))
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
