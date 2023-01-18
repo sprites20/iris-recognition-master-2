@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "Noisy_Gaussian_mmu2_111_1_3.jpg",
+    "groundtruth": "111_1_1.jpg",
+    "groundtruth_eyename": "1eye_111",
+    "side": "left",
+    "best_match_string": "./enrolledimages/15/left/1",
+    "main_keypoints": {
+        "right-side": 44,
+        "left-side": 44,
+        "bottom": 32,
+        "complete": 119
+    },
+    "matches": {
+        "right-side": 2,
+        "left-side": 0,
+        "bottom": 0,
+        "complete": 1
+    },
+    "best_match_value": 0.013464476699770817
+}

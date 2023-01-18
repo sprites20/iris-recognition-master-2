@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "Noisy_Speckle_casia_004_1_3.jpg",
+    "groundtruth": "004_1_1.jpg",
+    "groundtruth_eyename": "1eye_004",
+    "side": "left",
+    "best_match_string": "./enrolledimages/143/left/1",
+    "main_keypoints": {
+        "right-side": 62,
+        "left-side": 67,
+        "bottom": 87,
+        "complete": 223
+    },
+    "matches": {
+        "right-side": 9,
+        "left-side": 9,
+        "bottom": 26,
+        "complete": 31
+    },
+    "best_match_value": 0.17933841903974446
+}

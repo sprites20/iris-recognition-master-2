@@ -22,7 +22,7 @@ from PyQt5.QtGui import QPixmap
 
 from pathlib import Path    
 import json
-
+from PIL import Image
 
 
 curr_image = ""
@@ -395,6 +395,7 @@ class Ui_MainWindow(object):
                         data = json.load(open("./enrolledimages/" + i + '/' + sidetext + '/' + j + "/info.json"))
                         ground = data["groundtruth"].split('_')
                         eyename = data["eyename"]
+                        #eyename = str(self.textEdit.toPlainText())
                         #print(eyename)
                         #print(str(self.textEdit.toPlainText()), eyename, str(self.textEdit.toPlainText()) == eyename)
                         currmg = image_curr.split('/')[-1].split('_')
@@ -497,7 +498,7 @@ class Ui_MainWindow(object):
             try:
                 curr_lms = lms[matchjsontable["eyename"]]
                 curr_rec = recognition_cache["groundtruth"].split("_")
-                curr_matching = Path(image_curr).name.split("_")
+                curr_matching = Path(image_curr).name.split("_")[-3:]
                 eyes_matched = curr_rec[0] == curr_matching[0] and curr_rec[1] == curr_matching[1]
                 print("Match:", best_match_value, "Required:", curr_lms)
                 print("Match:", curr_matching, "Required:", curr_rec)
@@ -532,9 +533,12 @@ class Ui_MainWindow(object):
         for path in globity:
             if path.endswith('json'):
                 currjson = json.load(open(path))
+                #print(path)
                 #print(currjson)
                 if len(currjson["eyebeingrecognized"].split('_')) > 3:
+                    #print("Yes")
                     if currjson["eyebeingrecognized"].split('_')[-3] == currjson["groundtruth"].split('_')[-3] and currjson["eyebeingrecognized"].split('_')[-2] == currjson["groundtruth"].split('_')[-2]:
+                        #print(path)
                         if len(currjson["eyebeingrecognized"].split('_')) != 3 and currjson["best_match_value"] != 0:
                             prefix = currjson["eyebeingrecognized"].split('_')
                             prefix2 = ""
@@ -542,26 +546,29 @@ class Ui_MainWindow(object):
                                 prefix2 += prefix[i] + '_'
                             somename = prefix2 + currjson["groundtruth_eyename"]
                             
-                            if not somename in lms:
-                                #print(True)
-                                lms[somename] = 1
-                            if currjson["best_match_value"] < lms[somename] and currjson["best_match_value"] != 0:
-                                lms[somename] = currjson["best_match_value"]
+                        if not str(currjson["groundtruth_eyename"]) in lms:
+                            #print(True)
+                            print(str(currjson["groundtruth_eyename"]))
+                            lms[str(currjson["groundtruth_eyename"])] = 1
+                        if currjson["best_match_value"] < lms[str(currjson["groundtruth_eyename"])] and currjson["best_match_value"] >= 0.045:
+                            lms[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
                 elif len(currjson["eyebeingrecognized"].split('_')) == 3:
                     #print(currjson["eyebeingrecognized"].split('_'))
                     if currjson["eyebeingrecognized"].split('_')[-3] == currjson["groundtruth"].split('_')[-3] and currjson["eyebeingrecognized"].split('_')[-2] == currjson["groundtruth"].split('_')[-2]:
                         if not str(currjson["groundtruth_eyename"]) in lms:
                             #print(True)
                             lms[str(currjson["groundtruth_eyename"])] = 1
-                        if currjson["best_match_value"] < lms[str(currjson["groundtruth_eyename"])]:
+                        if currjson["best_match_value"] < lms[str(currjson["groundtruth_eyename"])] and currjson["best_match_value"] >= 0.045:
                             lms[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
                 elif currjson["eyebeingrecognized"] == currjson["groundtruth"]:
                     #print(currjson["eyebeingrecognized"], currjson["groundtruth"], True)
                     if not str(currjson["groundtruth_eyename"]) in lms:
                         #print(True)
                         lms[str(currjson["groundtruth_eyename"])] = 1
-                    if currjson["best_match_value"] < lms[str(currjson["groundtruth_eyename"])] and currjson["best_match_value"] != 0:
+                    if currjson["best_match_value"] < lms[str(currjson["groundtruth_eyename"])] and currjson["best_match_value"] >= 0.045:
                         lms[str(currjson["groundtruth_eyename"])] = currjson["best_match_value"]
+                else:
+                    print("Name not found!")
         print(lms)
         #lms[]
     def thisenroll(self):
@@ -675,7 +682,6 @@ class Ui_MainWindow(object):
             path = "./MMU2/**"
             globity = glob.glob(path, recursive=True)
             for path in globity:
-                
                 if path.endswith('jpg'):
                     print(path)
                     #print(path, path.split('\\')[-1].split('_')[-3], path.split('\\')[-1].split('_')[-2], path.split('\\')[-1].split('_')[-1])
@@ -691,41 +697,77 @@ class Ui_MainWindow(object):
             #datas = ["normals", "gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]
             #datas = ["normals"] , "poisson", "gaussianblur", "median", "bilateral", "motion"
             #datas = ["speckle", "saltandpepper"]
-            datas = ["normals"]
+            blurs = ["01 - Gaussian Blur", "02 - Motion Blur", "03 - Median Blur", "04 - Bilateral Blur"]
+            noises = ["01 - Gaussian Noise", "02 - Salt and Pepper Noise", "03 - Poisson Noise", "04 - Speckle Noise"]
+            filters = ["01 - Regularized Filter", "02 - Wiener Filter", "03 - Lucy Richardson"]
+            #"03 - Added Blur", "04 - Added Blur and Noise",  "05 - Denoised", "06 - Denoised"
+            #datas = ["02 - Added Noise", "05 - Deblurred", "06 - Deblurred",  "07 - Deblurred and Denoised"]
             print(self.calculate_metrics(27, 0, 0, 3))
-            for i in datas:
-                path = "./1-5/" + i + "/**"
-                globity = glob.glob(path, recursive=True)
-                for path in globity:
-                    try:
-                        if path.endswith('jpg'):
+            for i in blurs:
+                for j in noises:
+                    path = "./a_input/04 - Added Blur and Noise/" + i + "/" + j + "/**"
+                    globity = glob.glob(path, recursive=True)
+                    for path in globity:
+                        try:
                             print(path)
-                            path = path.split('/')[-1].split('\\')
-                            side = int(path[-1].split('_')[-2]) - 1
-                            num = int(path[-1].split('_')[-3])
-                            #print(path)
-                            #print(side)
-                            pathsub = ""
-                            for i in path:
-                                pathsub += '/' + i 
-                            #print(path)
-                            mainpath = pathlib.Path(__file__).parent.resolve()
-                            #print(mainpath)
-                            global curr_image
-                            curr_image = str(mainpath) + '/1-5' + str(pathsub)
-                            print(curr_image)
-                            global eyechanged
-                            eyechanged = True
-                            if curr_image != "" and path[-1].split('_')[-1] == '2.jpg' or path[-1].split('_')[-1] == '1.jpg' or path[-1].split('_')[-1] == '3.jpg':
-                                if num in range(1,10) or num in range(109,119):         #Split
-                                    print(num)
-                                    self.recognize(str(curr_image), side)
-                                #self.recognize(str(curr_image), side)
-                            global confusion_matrix
-                            print(confusion_matrix)
-                    except:
-                        pass
-            print(self.calculate_metrics(confusion_matrix[0], confusion_matrix[1], confusion_matrix[2], confusion_matrix[3]))
+                            if path.endswith('bmp'):
+                                #Check if -2 is mmu2
+                                #if yes, rename
+                                if path.split("_")[-2] != "mmu2":
+                                    image = cv2.imread(path)
+                                    cv2.imwrite(path.replace("bmp", "jpg"), image)
+                                    #img = Image.open(path)
+                                    print(path.replace("bmp", "jpg"))
+                                    #img.save(path.replace("bmp", "jpg"), "jpg")
+                                    print(path, "to jpg")
+                                else:
+                                    image = cv2.imread(path)
+                                    path2 = path.split("_")
+                                    path2[-1] = path2[-1].replace(".bmp", "")
+                                    someinttostr = str(path2[-1])
+                                    print(someinttostr)
+                                    n = 2 # chunk length
+                                    chunks = [int(someinttostr[i:i+n]) for i in range(0, len(someinttostr), n)]
+                                    print(chunks)
+                                    path2.remove(path2[-1])
+                                    chunks[0] += 108#int(chunks[0]) + 108
+                                    path3 = '_'.join(map(str,path2+chunks)) + ".jpg"
+                                    #res = "".join([str(item) for item in path2])
+                                    cv2.imwrite(path3, image)
+                                    print(path3, "to jpg")
+                            if path.endswith('jpg'):
+                                print(path)
+                                #path.replace(".\\", "")
+                                path = path.split('/')[-1].split('\\')
+                                side = int(path[-1].split('_')[-2]) - 1
+                                num = int(path[-1].split('_')[-3])
+                                #print(path)
+                                #print(side)
+                                pathsub = ""
+                                for q in path:
+                                    pathsub += '/' + q
+                                #print(path)
+                                mainpath = pathlib.Path(__file__).parent.resolve()
+                                #print(mainpath)
+                                global curr_image
+                                curr_image = str(mainpath) + "/a_input/04 - Added Blur and Noise/" + i + str(pathsub)
+                                print(curr_image)
+                                global eyechanged
+                                eyechanged = True
+                                if curr_image != "" and path[-1].split('_')[-1] == '2.jpg' or path[-1].split('_')[-1] == '1.jpg' or path[-1].split('_')[-1] == '3.jpg':
+                                    if num in range(1,10) or num in range(109,114):         #Split
+                                        print(num)
+                                        self.recognize(str(curr_image), side)
+                                    #self.recognize(str(curr_image), side)
+                                global confusion_matrix
+                                print(confusion_matrix)
+                            #global confusion_matrix
+                        except Exception as e:
+                            print(e)
+                            pass
+                    print(i, confusion_matrix)
+                    print(i, self.calculate_metrics(confusion_matrix[0], confusion_matrix[1], confusion_matrix[2], confusion_matrix[3]))
+                print(self.calculate_metrics(confusion_matrix[0], confusion_matrix[1], confusion_matrix[2], confusion_matrix[3]))
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))

@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "BlurredNoisy_Gaussian_Gaussian_casia_001_1_2.bmp",
+    "groundtruth": "001_1_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "left",
+    "best_match_string": "./enrolledimages/1/left/1",
+    "main_keypoints": {
+        "right-side": 44,
+        "left-side": 36,
+        "bottom": 40,
+        "complete": 130
+    },
+    "matches": {
+        "right-side": 5,
+        "left-side": 3,
+        "bottom": 0,
+        "complete": 1
+    },
+    "best_match_value": 0.051165501165501164
+}

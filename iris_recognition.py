@@ -16,9 +16,9 @@ from matplotlib import pyplot as plt
 currentimage = ""
 
 
-from numba import jit, cuda
+#from numba import jit, cuda
 
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def compare_images(filepath1, filepath2):
     #print( "Analysing " + filepath1)
     global currentimage
@@ -31,7 +31,7 @@ def compare_images(filepath1, filepath2):
 
     getall_matches(rois_1, rois_2, 0.8, 10, 0.15, show=True)
 
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def compare_binfiles(bin_path1, bin_path2, rois1, keycache1):
     #Cache bin_path1
     if rois1 == None:
@@ -49,7 +49,7 @@ def compare_binfiles(bin_path1, bin_path2, rois1, keycache1):
         return key2, matches, rois_1, key1
     
 
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def load_rois_from_gets(filepath, some):
     currentimage = some
 
@@ -271,7 +271,7 @@ def find_ext_iris(img, pupil_circle, center_range, radius_range):
     filtered = filtered_circles(total_circles)
 
     return get_mean_circle(filtered)
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def point_in_circle(c_col, c_row, c_radius, p_col, p_row):
     return distance(c_col, c_row, p_col, p_row) <= c_radius
 
@@ -597,7 +597,7 @@ def load_keypoints(sift, rois, show=False):
         #print(currentimage)
     #print(keypoints)
     return keypoints
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def load_descriptors(sift, rois):
     for pos in ['right-side','left-side','bottom','complete']:
         rois[pos]['kp'], rois[pos]['des'] = \
@@ -733,23 +733,23 @@ def get_matches(roipos_1, roipos_2,
             filtered.remove(m)
 
     return filtered 
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def angle_v(x1,y1,x2,y2):
     return math.degrees(math.atan2(-(y2-y1),(x2-x1)))
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def distance(x1,y1,x2,y2):
     dst = math.sqrt((x2-x1)**2 + (y2-y1)**2)
     return dst
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def mean(x):
     sum = 0.0
     for i in range(len(x)):
         sum += x[i]
     return sum/len(x)
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def median(x):
     return np.median(np.array(x))
-@jit(target_backend='cuda')
+#@jit(target_backend='cuda')
 def standard_dev(x):
     if not x:
         #print( 'Error: empty list parameter in standard_dev() !')

@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "imtest.bmp",
+    "groundtruth": "001_1_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "left",
+    "best_match_string": "./enrolledimages/1/left/1",
+    "main_keypoints": {
+        "right-side": 47,
+        "left-side": 34,
+        "bottom": 37,
+        "complete": 130
+    },
+    "matches": {
+        "right-side": 6,
+        "left-side": 2,
+        "bottom": 2,
+        "complete": 8
+    },
+    "best_match_value": 0.07551890486809135
+}

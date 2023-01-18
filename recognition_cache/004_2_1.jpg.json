@@ -6,15 +6,15 @@
     "best_match_string": "./enrolledimages/143/right/1",
     "main_keypoints": {
         "right-side": 102,
-        "left-side": 81,
+        "left-side": 83,
         "bottom": 130,
-        "complete": 316
+        "complete": 318
     },
     "matches": {
         "right-side": 93,
-        "left-side": 74,
+        "left-side": 72,
         "bottom": 111,
-        "complete": 281
+        "complete": 280
     },
-    "best_match_value": 0.8921079032428002
+    "best_match_value": 0.8783959709751668
 }

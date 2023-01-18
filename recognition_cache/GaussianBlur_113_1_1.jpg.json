@@ -7,14 +7,14 @@
     "main_keypoints": {
         "right-side": 32,
         "left-side": 21,
-        "bottom": 23,
-        "complete": 77
+        "bottom": 24,
+        "complete": 76
     },
     "matches": {
         "right-side": 6,
-        "left-side": 4,
-        "bottom": 12,
-        "complete": 22
+        "left-side": 5,
+        "bottom": 13,
+        "complete": 23
     },
-    "best_match_value": 0.2963574016563147
+    "best_match_value": 0.31747337092731825
 }

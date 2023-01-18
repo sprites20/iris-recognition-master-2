@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "Noisy_Gaussian_casia_003_2_1.jpg",
+    "groundtruth": "003_2_1.jpg",
+    "groundtruth_eyename": "1eye_003",
+    "side": "right",
+    "best_match_string": "./enrolledimages/132/right/1",
+    "main_keypoints": {
+        "right-side": 82,
+        "left-side": 56,
+        "bottom": 76,
+        "complete": 215
+    },
+    "matches": {
+        "right-side": 17,
+        "left-side": 15,
+        "bottom": 15,
+        "complete": 38
+    },
+    "best_match_value": 0.21232170578175444
+}

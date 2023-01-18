@@ -1,0 +1,114 @@
+from pathlib import Path    
+import json
+import glob
+
+path = "./**"
+globity = glob.glob(path, recursive=True)
+
+currlowest = 1
+currlowestmotionblur = 1
+currlowestmix = 1
+currlowestpoissonblur = 1
+
+strcurrlowest = None
+strcurrlowestmotionblur = None
+strcurrlowestmix = None
+strcurrlowestpoissonblur = None
+
+
+currhighest = 0
+currhighestmotionblur = 0
+currhighestmix = 0
+currhighestpoissonblur = 0
+poissonblurs = 0
+
+strcurrhighest = None
+strcurrhighestmotionblur = None
+strcurrhighestmix = None
+strcurrhighestpoissonblur = None
+strpoissonblurs = None
+
+motionblurs = 0
+normals = 0
+mix = 0
+poissonblurs = 0
+
+motionblursmean = 0
+normalsmean = 0
+mixmean = 0
+poissonblursmean = 0
+
+blurs = ['GaussianBlur', 'MedianBlur', 'BilateralBlur', 'MotionBlur']
+for path in globity:
+    if path.endswith('json'):
+        currjson = json.load(open(path))
+        #print(path)
+        eyebeingrecognized = currjson["eyebeingrecognized"].split('_')
+        groundtruth = currjson["groundtruth"].split('_')
+        matchvalue = currjson["best_match_value"]
+        if eyebeingrecognized[0] == 'MotionBlur':
+            if matchvalue < currlowestmotionblur:
+                currlowestmotionblur = matchvalue
+                strcurrlowestmotionblur = currjson["eyebeingrecognized"]
+            if matchvalue > currhighestmotionblur:
+                currhighestmotionblur = matchvalue
+                strcurrhighestmotionblur = currjson["eyebeingrecognized"]
+            motionblurs = motionblurs + 1
+            motionblursmean += matchvalue
+        elif eyebeingrecognized[0] == eyebeingrecognized[-3]:
+            if matchvalue < currlowest:
+                currlowest = matchvalue
+                strcurrlowest = currjson["eyebeingrecognized"]
+            if matchvalue > currhighestmotionblur:
+                currhighest = matchvalue
+                strcurrhighest = currjson["eyebeingrecognized"]
+            normals = normals + 1
+            normalsmean += matchvalue
+        elif eyebeingrecognized[0] == 'motion':
+            if matchvalue < currlowestmix:
+                currlowestmix = matchvalue
+                strcurrlowestmix = currjson["eyebeingrecognized"]
+            if matchvalue > currhighestmix:
+                currhighestmix = matchvalue
+                strcurrhighestmix = currjson["eyebeingrecognized"]
+            mix = mix + 1
+            mixmean += matchvalue
+        elif eyebeingrecognized[0] == 'poisson':
+            if matchvalue < currlowestpoissonblur:
+                currlowestpoissonblur = matchvalue
+                strcurrlowestpoissonblur = currjson["eyebeingrecognized"]
+            if matchvalue > currhighestpoissonblur:
+                currhighestpoissonblur = matchvalue
+                strcurrhighestpoissonblur = currjson["eyebeingrecognized"]
+            poissonblurs = poissonblurs + 1
+            poissonblursmean += matchvalue
+
+try:
+    motionblursmean /= motionblurs
+    normalsmean /= normals
+    mixmean /= mix
+    poissonblursmean /= poissonblurs
+except:
+    pass
+print("LTPS Normals:", currlowest, strcurrlowest)
+print("LTPS Motion:", currlowestmotionblur, strcurrlowestmotionblur)
+print("LTPS Poisson:", currlowestpoissonblur, strcurrlowestpoissonblur)
+print("LTPS Motion-Poisson:", currlowestmix, strcurrlowestmix)
+
+print("HTPS Normals:", currhighest, strcurrhighest)
+print("HTPS Motion:", currhighestmotionblur, strcurrhighestmotionblur)
+print("HTPS Poisson:", currhighestpoissonblur, strcurrhighestpoissonblur)
+print("HTPS Motion-Poisson:", currhighestmix, strcurrhighestmix)
+
+print("Normals Count:", normals)
+print("Motions Count:", motionblurs)
+print("Poisson Count:", poissonblurs)
+print("Mix Count:", mix)
+
+print("Normals Mean:",normalsmean)
+print("Motions Mean:",motionblursmean)
+print("Poisson Mean:", poissonblursmean)
+print("Mix Mean:", mixmean)
+
+        #print(json.load(open(path))["eyebeingrecognized"])
+        

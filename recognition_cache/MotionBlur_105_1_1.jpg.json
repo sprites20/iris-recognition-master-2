@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "MotionBlur_105_1_1.jpg",
+    "groundtruth": "105_1_1.jpg",
+    "groundtruth_eyename": "1eye_105",
+    "side": "left",
+    "best_match_string": "./enrolledimages/8/left/1",
+    "main_keypoints": {
+        "right-side": 41,
+        "left-side": 42,
+        "bottom": 43,
+        "complete": 124
+    },
+    "matches": {
+        "right-side": 3,
+        "left-side": 2,
+        "bottom": 7,
+        "complete": 8
+    },
+    "best_match_value": 0.08702415150826034
+}

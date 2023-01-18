@@ -6,7 +6,7 @@
     "best_match_string": "./enrolledimages/17/left/1",
     "main_keypoints": {
         "right-side": 9,
-        "left-side": 16,
+        "left-side": 15,
         "bottom": 17,
         "complete": 33
     },
@@ -16,5 +16,5 @@
         "bottom": 3,
         "complete": 8
     },
-    "best_match_value": 0.26618204099821746
+    "best_match_value": 0.2713903743315508
 }

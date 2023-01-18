@@ -209,6 +209,7 @@ def lucyrichardson(imgpath):
     psf = np.ones((5, 5)) / 25
     astro_noisy = cv2.imread( imgpath)
     astro_noisy = color.rgb2gray(astro_noisy)
+    astro_noisy = anisodiff(astro_noisy, niter=4)
     deconvolved_RL = restoration.richardson_lucy(astro_noisy, psf)
     
     #deconvolved_RL = cv2.cvtColor(deconvolved_RL, cv2.COLOR_GRAY2RGB)
@@ -235,6 +236,7 @@ def lucyrichardson(imgpath):
     """
     
     thisimg = deconvolved_RL*255
+    
     height, width = thisimg.shape
     print(height, width)
     
@@ -247,7 +249,7 @@ def lucyrichardson(imgpath):
     
     somepath = imgpath.split('\\')[-1]
     #cv2.imshow("test.jpg", croppedimg)
-    cv2.imwrite("LucyRichardson_" + imgpath, croppedimg)
+    cv2.imwrite("Anisotropic_LucyRichardson_" + somepath, croppedimg)
 
 #lucyrichardson('MotionBlur_001_1_1.jpg')
 datas = ["gaussian", "speckle", "saltandpepper", "poisson", "gaussianblur", "median", "bilateral", "motion", "gaussianblur-gaussian", "gaussianblur-speckle", "gaussianblur-saltandpepper", "gaussianblur-poisson", "median-gaussian", "median-speckle", "median-saltandpepper", "median-poisson", "bilateral-gaussian", "bilateral-speckle", "bilateral-saltandpepper", "bilateral-poisson", "motion-gaussian", "motion-speckle", "motion-saltandpepper", "motion-poisson"]

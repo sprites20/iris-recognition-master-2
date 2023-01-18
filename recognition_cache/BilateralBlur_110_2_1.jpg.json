@@ -8,7 +8,7 @@
         "right-side": 31,
         "left-side": 13,
         "bottom": 22,
-        "complete": 67
+        "complete": 66
     },
     "matches": {
         "right-side": 7,
@@ -16,5 +16,5 @@
         "bottom": 12,
         "complete": 25
     },
-    "best_match_value": 0.40148344674102976
+    "best_match_value": 0.40289683434844725
 }

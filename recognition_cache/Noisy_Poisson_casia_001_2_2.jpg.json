@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "Noisy_Poisson_casia_001_2_2.jpg",
+    "groundtruth": "001_2_1.jpg",
+    "groundtruth_eyename": "1eye_001",
+    "side": "right",
+    "best_match_string": "./enrolledimages/1/right/1",
+    "main_keypoints": {
+        "right-side": 52,
+        "left-side": 62,
+        "bottom": 87,
+        "complete": 214
+    },
+    "matches": {
+        "right-side": 7,
+        "left-side": 11,
+        "bottom": 12,
+        "complete": 15
+    },
+    "best_match_value": 0.13001480797019455
+}

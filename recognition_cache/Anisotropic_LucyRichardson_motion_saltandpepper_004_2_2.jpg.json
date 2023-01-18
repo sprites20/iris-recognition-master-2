@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "Anisotropic_LucyRichardson_motion_saltandpepper_004_2_2.jpg",
+    "groundtruth": "004_2_1.jpg",
+    "groundtruth_eyename": "1eye_004",
+    "side": "right",
+    "best_match_string": "./enrolledimages/143/right/1",
+    "main_keypoints": {
+        "right-side": 197,
+        "left-side": 197,
+        "bottom": 232,
+        "complete": 632
+    },
+    "matches": {
+        "right-side": 1,
+        "left-side": 2,
+        "bottom": 1,
+        "complete": 4
+    },
+    "best_match_value": 0.006466971286893981
+}

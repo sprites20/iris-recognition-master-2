@@ -1,0 +1,20 @@
+{
+    "eyebeingrecognized": "Noisy_Salt and Pepper_casia_003_1_3.jpg",
+    "groundtruth": "003_1_1.jpg",
+    "groundtruth_eyename": "1eye_003",
+    "side": "left",
+    "best_match_string": "./enrolledimages/132/left/1",
+    "main_keypoints": {
+        "right-side": 72,
+        "left-side": 89,
+        "bottom": 106,
+        "complete": 284
+    },
+    "matches": {
+        "right-side": 7,
+        "left-side": 12,
+        "bottom": 31,
+        "complete": 47
+    },
+    "best_match_value": 0.17249986770788442
+}
